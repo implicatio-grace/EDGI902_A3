@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>The Learner as Wayfinder — journey figure</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg: oklch(0.985 0.008 80);
+    --surface: oklch(0.998 0.004 80);
+    --paper: oklch(0.955 0.022 78);
+    --paper-deep: oklch(0.93 0.025 78);
+    --text: oklch(0.22 0.02 70);
+    --text-soft: oklch(0.45 0.025 70);
+    --text-faint: oklch(0.62 0.02 75);
+    --line: oklch(0.90 0.015 75);
+    --line-soft: oklch(0.94 0.01 75);
+    --rule: oklch(0.78 0.025 75);
+    --sage: oklch(0.50 0.07 145);
+    --plum: oklch(0.50 0.085 330);
+    --navy: oklch(0.45 0.075 250);
+    --amber: oklch(0.56 0.10 70);
+    --ink: oklch(0.26 0.025 65);
+    --ink-soft: oklch(0.45 0.025 65);
+    --stage-bg: oklch(0.90 0.014 78);
+  }
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; background: var(--stage-bg); }
+  body{ display:flex; align-items:center; justify-content:center; min-height:100vh; font-family:"Plus Jakarta Sans", system-ui, sans-serif; }
+
+  /* ---- Fixed A4-landscape figure stage ---- */
+  .fig{
+    position: relative;
+    width: 1600px; height: 1131px;
+    background:
+      radial-gradient(120% 100% at 0% 0%, oklch(0.975 0.012 90) 0%, var(--bg) 55%),
+      var(--bg);
+    color: var(--text);
+    padding: 40px 44px 30px;
+    overflow: hidden;
+    box-shadow: 0 24px 70px rgba(40,30,18,.18);
+  }
+  .fig::before{
+    /* hairline page frame */
+    content:""; position:absolute; inset:18px; border:1px solid var(--line); border-radius:4px; pointer-events:none;
+  }
+
+  /* ---- Header ---- */
+  .hd{ display:flex; justify-content:space-between; align-items:flex-start; gap:30px; position:relative; z-index:2; }
+  .hd-eyebrow{ font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--text-faint); margin-bottom:9px; }
+  .hd-title{ font-family:"EB Garamond",serif; font-weight:500; font-size:38px; line-height:1.02; color:var(--ink); letter-spacing:-.01em; margin:0; }
+  .hd-title em{ font-style:italic; color:var(--sage); }
+  .hd-sub{ font-family:"EB Garamond",serif; font-style:italic; font-size:16px; color:var(--ink-soft); margin-top:7px; max-width:620px; }
+
+  .legend{ flex:0 0 auto; width:330px; display:flex; flex-direction:column; gap:8px; background:var(--surface); border:1px solid var(--line); border-radius:11px; padding:13px 15px; }
+  .leg-row{ display:flex; gap:18px; align-items:center; }
+  .leg-item{ display:flex; align-items:baseline; gap:7px; font-size:11.5px; color:var(--text-soft); }
+  .leg-item .ar{ font-family:"EB Garamond",serif; font-size:17px; line-height:1; font-weight:600; }
+  .ar.used{ color:var(--text-faint); }
+  .ar.prod{ color:var(--ink); }
+  .leg-div{ height:1px; background:var(--line); margin:1px 0; }
+  .leg-chip{ font-family:"JetBrains Mono",monospace; font-size:8.5px; letter-spacing:.1em; text-transform:uppercase; border:1px solid var(--line); border-radius:999px; padding:3px 9px; color:var(--text-soft); background:var(--surface); white-space:nowrap; }
+  .leg-chip.off{ border-style:dashed; color:var(--text-faint); }
+  .leg-off{ display:flex; align-items:center; gap:9px; font-size:10.5px; color:var(--text-faint); line-height:1.25; }
+  .leg-rhythm{ font-family:"EB Garamond",serif; font-style:italic; font-size:12px; color:var(--ink-soft); line-height:1.4; }
+  .leg-rhythm b{ font-style:normal; font-weight:600; color:var(--ink); }
+  .leg-key{ display:block; margin-top:5px; font-family:"JetBrains Mono",monospace; font-style:normal; font-size:8px; letter-spacing:.04em; color:var(--text-faint); }
+  .leg-rhythm .h{ font-family:"JetBrains Mono",monospace; font-style:normal; font-size:8.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-faint); display:block; margin-bottom:3px; }
+
+  /* ---- Timeframe ribbon ---- */
+  .ribbon{ position:relative; z-index:2; margin-top:24px; display:grid; grid-template-columns:118px repeat(5,1fr); gap:16px; align-items:center; }
+  .ribbon-key{ font-family:"JetBrains Mono",monospace; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-faint); text-align:right; padding-right:4px; }
+  .tf{ height:26px; border-radius:6px; background:var(--surface); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--text-soft); }
+  .tf.pre{ background:var(--paper); border-style:dashed; }
+
+  /* ---- Main lane grid ---- */
+  .grid{ position:relative; z-index:2; margin-top:20px; display:grid; grid-template-columns:118px repeat(5,1fr); gap:16px; }
+  .lanelab{ display:flex; flex-direction:column; justify-content:center; gap:5px; }
+  .lanelab .ll{ font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink); font-weight:600; }
+  .lanelab .lg{ font-family:"EB Garamond",serif; font-style:italic; font-size:12px; color:var(--text-faint); line-height:1.3; }
+
+  /* Resources lane */
+  .res-lane{ display:flex; flex-direction:column; gap:7px; padding-top:2px; justify-content:flex-start; }
+  .pill{ position:relative; background:var(--surface); border:1px solid var(--line); border-radius:9px; padding:7px 10px 7px 22px; font-size:11.5px; line-height:1.28; color:var(--text); }
+  .pill .a{ position:absolute; left:8px; top:6px; font-family:"EB Garamond",serif; font-size:16px; font-weight:600; line-height:1; }
+  .pill.used .a{ color:var(--text-faint); }
+  .pill.prod{ border-color:color-mix(in oklch, var(--c) 36%, var(--line)); background:color-mix(in oklch, var(--c) 6%, var(--surface)); }
+  .pill.prod .a{ color:var(--c); }
+  .pill.prod{ font-weight:500; }
+  .pill .who{ display:block; margin-top:2px; font-family:"JetBrains Mono",monospace; font-size:8px; letter-spacing:.07em; text-transform:uppercase; color:var(--text-faint); }
+  .offchip{ align-self:center; font-family:"JetBrains Mono",monospace; font-size:8.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--text-faint); border:1px dashed var(--rule); border-radius:999px; padding:3px 11px; background:repeating-linear-gradient(135deg, transparent, transparent 5px, oklch(0.93 0.02 78) 5px, oklch(0.93 0.02 78) 6px); margin:1px 0; }
+
+  /* Task lane */
+  .task-lane{ position:relative; }
+  .task{ position:relative; height:100%; background:var(--surface); border:1px solid var(--line); border-top:3px solid var(--c); border-radius:12px; padding:14px 15px 13px; display:flex; flex-direction:column; gap:0; box-shadow:0 2px 10px rgba(50,40,25,.05); }
+  .task.pre{ background:var(--paper); border-top-style:dashed; }
+  .task-top{ display:flex; align-items:center; gap:11px; }
+  .task-id{ flex:1; min-width:0; }
+  .node{ flex:0 0 auto; width:44px; height:44px; border-radius:50%; background:var(--surface); border:1.5px solid var(--c); display:flex; align-items:center; justify-content:center; font-family:"EB Garamond",serif; font-style:italic; font-size:24px; color:var(--c); }
+  .task.pre .node{ font-size:12.5px; font-style:normal; font-family:"JetBrains Mono",monospace; letter-spacing:.04em; }
+  .task-name{ font-family:"EB Garamond",serif; font-size:19px; font-weight:500; color:var(--ink); line-height:1.04; }
+  .task-step{ font-family:"JetBrains Mono",monospace; font-size:8.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--c); margin-top:4px; white-space:nowrap; }
+  .task-purpose{ font-family:"EB Garamond",serif; font-style:italic; font-size:13px; line-height:1.34; color:var(--ink-soft); margin-top:10px; text-wrap:pretty; }
+  .rhythm{ margin-top:auto; padding-top:11px; display:flex; align-items:center; gap:5px; flex-wrap:wrap; font-family:"JetBrains Mono",monospace; font-size:8px; letter-spacing:.04em; text-transform:uppercase; color:var(--text-faint); }
+  .rhythm .on{ color:var(--text-soft); }
+  .rhythm .hop{ color:var(--c); font-size:10px; }
+
+  /* Supports lane */
+  .sup-lane{ display:flex; flex-direction:column; gap:6px; padding-top:2px; }
+  .sup{ background:color-mix(in oklch, var(--c) 7%, var(--surface)); border:1px solid color-mix(in oklch, var(--c) 22%, var(--line)); border-left:3px solid color-mix(in oklch,var(--c) 60%, var(--line)); border-radius:8px; padding:6px 10px; font-size:11px; line-height:1.26; color:var(--text); }
+
+  /* connecting journey path behind task nodes */
+  .journey-svg{ position:absolute; z-index:1; pointer-events:none; left:0; top:0; }
+
+  /* ---- Lower band: spiral + axis ---- */
+  .lower{ position:relative; z-index:2; margin-top:26px; }
+  .spiral-band{ position:relative; height:96px; }
+  .spiral-band svg{ position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+  .spiral-cap{ position:absolute; left:50%; top:30px; transform:translateX(-50%); text-align:center; font-family:"EB Garamond",serif; font-style:italic; font-size:14px; color:var(--ink-soft); background:var(--bg); padding:2px 14px; white-space:nowrap; }
+  .spiral-cap b{ font-style:normal; font-weight:600; color:var(--sage); }
+
+  .axis{ display:grid; grid-template-columns:118px 1fr; gap:16px; align-items:center; margin-top:2px; }
+  .axis-lab{ font-family:"JetBrains Mono",monospace; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-faint); text-align:right; line-height:1.3; }
+  .axis-track{ position:relative; height:30px; display:flex; align-items:center; }
+  .axis-line{ position:absolute; left:0; right:0; top:50%; height:2px; background:linear-gradient(90deg, var(--sage), var(--plum), var(--navy), var(--amber)); border-radius:2px; opacity:.55; }
+  .axis-end{ position:relative; z-index:2; font-family:"EB Garamond",serif; font-size:13.5px; color:var(--ink); background:var(--bg); padding:0 12px; }
+  .axis-end .t{ font-family:"JetBrains Mono",monospace; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-faint); display:block; }
+  .axis-mid{ position:relative; z-index:2; margin:0 auto; font-family:"EB Garamond",serif; font-style:italic; font-size:12.5px; color:var(--ink-soft); background:var(--bg); padding:0 14px; }
+
+  /* ---- ILO footer ---- */
+  .ilo{ position:relative; z-index:2; margin-top:22px; border:1px solid var(--line); border-radius:11px; background:var(--surface); display:grid; grid-template-columns:118px 1fr; overflow:hidden; }
+  .ilo-lab{ background:var(--paper); border-right:1px solid var(--line); display:flex; flex-direction:column; justify-content:center; gap:4px; padding:0 14px; }
+  .ilo-lab .ll{ font-family:"JetBrains Mono",monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink); font-weight:600; line-height:1.3; }
+  .ilo-lab .lg{ font-family:"EB Garamond",serif; font-style:italic; font-size:11px; color:var(--text-faint); }
+  .ilo-row{ display:grid; grid-template-columns:repeat(4,1fr); }
+  .ilo-c{ padding:12px 16px; border-right:1px dashed var(--line); }
+  .ilo-c:last-child{ border-right:none; }
+  .ilo-n{ font-family:"EB Garamond",serif; font-style:italic; font-size:15px; color:var(--c); font-weight:600; }
+  .ilo-t{ font-family:"EB Garamond",serif; font-size:14px; font-weight:600; color:var(--ink); margin:1px 0 3px; }
+  .ilo-d{ font-size:11px; line-height:1.32; color:var(--text-soft); }
+
+  /* per-column colour binding */
+  .c0{ --c: var(--sage); } .c1{ --c: var(--sage); } .c2{ --c: var(--plum); } .c3{ --c: var(--navy); } .c4{ --c: var(--amber); }
+</style>
+</head>
+<body>
+<div class="fig" id="fig">
+
+  <!-- Header -->
+  <div class="hd">
+    <div>
+      <div class="hd-eyebrow">Figure 1 · A representation of the design</div>
+      <h1 class="hd-title">The Learner as <em>Wayfinder</em></h1>
+      <p class="hd-sub">A wayfinding-informed onboarding experience for adult self-directed learners — the whole journey, the resources used and produced, and the supports that hold orientation across it.</p>
+    </div>
+    <div class="legend">
+      <div class="leg-row">
+        <span class="leg-item"><span class="ar used">→</span> used by the learner</span>
+        <span class="leg-item"><span class="ar prod">←</span> produced by the learner</span>
+      </div>
+      <div class="leg-off">
+        <span class="leg-chip off">off-platform</span>
+        <span>substantive learning happens off-platform &mdash; the platform signposts</span>
+      </div>
+      <div class="leg-div"></div>
+      <div class="leg-rhythm">
+        <span class="h">each activity &middot; screen rhythm</span><b>Open</b> → off-platform → <b>Returning</b> → off-platform → <b>Bridge</b><span class="leg-key">bold = an on-platform screen &middot; between = off-platform work</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Timeframe ribbon -->
+  <div class="ribbon">
+    <div class="ribbon-key">Timeframe<br/>2–3 weeks</div>
+    <div class="tf pre">Pre · arrive</div>
+    <div class="tf">Week 1</div>
+    <div class="tf">Week 1–2</div>
+    <div class="tf">Week 2</div>
+    <div class="tf">Week 3</div>
+  </div>
+
+  <!-- Main lanes -->
+  <div class="grid" id="grid">
+    <!-- Resources lane -->
+    <div class="lanelab"><span class="ll">Resources</span><span class="lg">used → / produced ←</span></div>
+
+    <div class="res-lane c0">
+      <div class="pill used"><span class="a">→</span>Settle-in audio / text<span class="who">practitioner voice</span></div>
+      <div class="pill used"><span class="a">→</span>Temporal-register chooser</div>
+      <div class="pill prod"><span class="a">←</span>A chosen pace — time or steps</div>
+    </div>
+    <div class="res-lane c1">
+      <div class="pill used"><span class="a">→</span>Curated reading set · 3–5 on ways of knowing</div>
+      <div class="pill used"><span class="a">→</span>Orientation map · first-impressions slate</div>
+      <div class="offchip">off-platform · read &amp; journal</div>
+      <div class="pill prod"><span class="a">←</span>A named question</div>
+    </div>
+    <div class="res-lane c2">
+      <div class="pill used"><span class="a">→</span>Pathway-card template · Prior-learning &amp; curiosity prompts</div>
+      <div class="pill used"><span class="a">→</span>Witnessing option · peer / AI / own practice</div>
+      <div class="offchip">off-platform · edge-map &amp; witness</div>
+      <div class="pill prod"><span class="a">←</span>A pathway card · a witness account</div>
+    </div>
+    <div class="res-lane c3">
+      <div class="pill used"><span class="a">→</span>Four bounded pathway options</div>
+      <div class="pill used"><span class="a">→</span>Curation AI · advisory, Screen 3.3</div>
+      <div class="offchip">off-platform · 20-min trial run</div>
+      <div class="pill prod"><span class="a">←</span>A chosen pathway · a provisional plan</div>
+    </div>
+    <div class="res-lane c4">
+      <div class="pill used"><span class="a">→</span>Emerging-insights snapshot template</div>
+      <div class="pill used"><span class="a">→</span>Witnessing option</div>
+      <div class="offchip">off-platform · a week of practice</div>
+      <div class="pill prod"><span class="a">←</span>Snapshot · next-edge · witness account</div>
+    </div>
+
+    <!-- Task lane -->
+    <div class="lanelab"><span class="ll">Tasks</span><span class="lg">the on-platform sequence</span></div>
+
+    <div class="task-lane c0"><div class="task pre">
+      <div class="task-top"><div class="node">Begin</div><div class="task-id"><div class="task-name">Settle in</div><div class="task-step">Pre-activity · choose pace</div></div></div>
+      <div class="task-purpose">Arrive in the space and set the journey's rhythm — by calendar or by readiness, re-chosen each cycle.</div>
+      <div class="rhythm"><span class="on">Settle-in</span> <span class="hop">→</span> <span class="on">pace choice</span></div>
+    </div></div>
+    <div class="task-lane c1"><div class="task">
+      <div class="task-top"><div class="node">1</div><div class="task-id"><div class="task-name">Orient</div><div class="task-step">Activity 1 · Week 1</div></div></div>
+      <div class="task-purpose">Sit with a chosen reading until a genuine question surfaces.</div>
+      <div class="rhythm"><span class="on">Open</span><span class="hop">→</span>off-platform<span class="hop">→</span><span class="on">Returning</span><span class="hop">→</span>off-platform<span class="hop">→</span><span class="on">Bridge</span></div>
+    </div></div>
+    <div class="task-lane c2"><div class="task">
+      <div class="task-top"><div class="node">2</div><div class="task-id"><div class="task-name">Self-locate</div><div class="task-step">Activity 2 · Week 1–2</div></div></div>
+      <div class="task-purpose">Map what you bring, your edges and constraints — then test it against a witness.</div>
+      <div class="rhythm"><span class="on">Open</span><span class="hop">→</span>off-platform<span class="hop">→</span><span class="on">Returning</span><span class="hop">→</span>off-platform<span class="hop">→</span><span class="on">Bridge</span></div>
+    </div></div>
+    <div class="task-lane c3"><div class="task">
+      <div class="task-top"><div class="node">3</div><div class="task-id"><div class="task-name">Navigate</div><div class="task-step">Activity 3 · Week 2</div></div></div>
+      <div class="task-purpose">Choose and commit a credible, provisional pathway you can live with — try twenty minutes of it first.</div>
+      <div class="rhythm"><span class="on">Open</span><span class="hop">→</span>off-platform<span class="hop">→</span><span class="on">Returning</span><span class="hop">→</span>off-platform<span class="hop">→</span><span class="on">Bridge</span></div>
+    </div></div>
+    <div class="task-lane c4"><div class="task">
+      <div class="task-top"><div class="node">4</div><div class="task-id"><div class="task-name">Reflect &amp; revise</div><div class="task-step">Activity 4 · Week 3</div></div></div>
+      <div class="task-purpose">Practice the pathway for a week, notice what shifts, and name the next edge.</div>
+      <div class="rhythm"><span class="on">Open</span><span class="hop">→</span>off-platform<span class="hop">→</span><span class="on">Returning</span><span class="hop">→</span>off-platform<span class="hop">→</span><span class="on">Bridge</span></div>
+    </div></div>
+
+    <!-- Supports lane -->
+    <div class="lanelab"><span class="ll">Supports</span><span class="lg">what holds orientation</span></div>
+
+    <div class="sup-lane c0">
+      <div class="sup">The chosen register applies to every later off-platform prompt</div>
+    </div>
+    <div class="sup-lane c1">
+      <div class="sup">Re-entry tags · <i>returning / bridge</i></div>
+      <div class="sup">Persistent orientation map</div>
+      <div class="sup">"Read, sleep, read again" pacing</div>
+    </div>
+    <div class="sup-lane c2">
+      <div class="sup">Guidance-preference selector · structure ↔ freedom</div>
+      <div class="sup">A witnessing model — a register, not a script</div>
+      <div class="sup">Persistent map</div>
+    </div>
+    <div class="sup-lane c3">
+      <div class="sup">"Smallest version that still counts" framing</div>
+      <div class="sup">Pathway card kept visible beside the options</div>
+    </div>
+    <div class="sup-lane c4">
+      <div class="sup">"Sit overnight" pacing prompt</div>
+      <div class="sup">Re-entry tags · the spiral diagram</div>
+    </div>
+  </div>
+
+  <!-- Lower band: spiral return -->
+  <div class="lower">
+    <div class="spiral-band">
+      <svg viewBox="0 0 1512 84" preserveAspectRatio="none">
+        <defs>
+          <marker id="arw" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="var(--sage)"/>
+          </marker>
+        </defs>
+        <path d="M1380 2 C 1380 64, 1180 70, 760 70 C 320 70, 150 64, 150 14"
+              fill="none" stroke="var(--sage)" stroke-width="1.6" stroke-dasharray="2 5" stroke-linecap="round"
+              marker-end="url(#arw)" opacity="0.85"/>
+      </svg>
+      <div class="spiral-cap">↻ <b>Return clearer</b> — the next-edge seeds the next question &amp; the self-sourced reading; pace re-chosen each pass</div>
+    </div>
+
+    <!-- andragogy -> heutagogy axis -->
+    <div class="axis">
+      <div class="axis-lab">Locus of<br/>self-direction</div>
+      <div class="axis-track">
+        <div class="axis-line"></div>
+        <span class="axis-end"><span class="t">andragogy</span>curated reading, chosen</span>
+        <span class="axis-mid">→ &nbsp;the locus of self-direction shifts outward across passes&nbsp; →</span>
+        <span class="axis-end"><span class="t">heutagogy</span>self-sourced reading, scoped</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ILO footer -->
+  <div class="ilo">
+    <div class="ilo-lab"><span class="ll">Intended<br/>learning<br/>outcomes</span><span class="lg">capacities, not content</span></div>
+    <div class="ilo-row">
+      <div class="ilo-c c1"><span class="ilo-n">1</span><div class="ilo-t">Epistemic self-awareness</div><div class="ilo-d">Attend to one's own ways of knowing; articulate a genuine, orienting question.</div></div>
+      <div class="ilo-c c2"><span class="ilo-n">2</span><div class="ilo-t">Self-location</div><div class="ilo-d">Map what you bring, where confidence sits, the edge of knowing, and real constraints.</div></div>
+      <div class="ilo-c c3"><span class="ilo-n">3</span><div class="ilo-t">Self-directed design</div><div class="ilo-d">Turn self-knowledge into a credible, bounded, provisional plan you can live with.</div></div>
+      <div class="ilo-c c4"><span class="ilo-n">4</span><div class="ilo-t">Reflective capacity</div><div class="ilo-d">Track shifts across a period of practice; name the next edge for a future cycle.</div></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

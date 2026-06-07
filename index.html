@@ -20,6 +20,7 @@
     --line-2:#bdb8aa;
     --accent: oklch(0.55 0.07 245);
     --accent-2: oklch(0.55 0.07 155);
+    --accent-3: oklch(0.58 0.085 70);
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
@@ -48,6 +49,7 @@
     display:grid;place-items:center;letter-spacing:0.02em;}
   .card.proto{--dot:var(--accent);}
   .card.comp{--dot:var(--accent-2);}
+  .card.fig{--dot:var(--accent-3);}
   .ctitle{font-family:"Fraunces","Source Serif Pro",Georgia,serif;font-size:21px;
     font-weight:400;letter-spacing:-0.01em;}
   .csub{color:var(--muted);font-size:13px;line-height:1.5;margin-top:5px;max-width:46ch;}
@@ -70,7 +72,7 @@
   <div class="wrap">
     <div class="eyebrow">EDGI902 · Assessment 3 · Learning Design Prototype</div>
     <h1>Learning&nbsp;as&nbsp;Wayfinding — <em>the working prototype</em> and its evidence companion</h1>
-    <p class="lede">Two self-contained artefacts. Open the interactive prototype to walk the full learner journey; open the companion to trace every design move back to the readings, themes, and design principles behind it.</p>
+    <p class="lede">Three self-contained artefacts. Open the interactive prototype to walk the full learner journey; open the companion to trace every design move back to the readings, themes, and design principles behind it; or open the journey figure to see the whole design on a single page.</p>
 
     <hr class="rule" />
 
@@ -89,6 +91,15 @@
         <span>
           <div class="ctitle">Evidence architecture companion</div>
           <div class="csub">Definitional canopy → readings → themes → design principles. The reasoning that grounds the prototype.</div>
+        </span>
+        <span class="arrow">&rarr;</span>
+      </a>
+
+      <a class="card fig" href="journey.html">
+        <span class="num">03</span>
+        <span>
+          <div class="ctitle">The learning journey &mdash; one figure</div>
+          <div class="csub">The whole design on a single page: the five tasks, the resources used and produced, the supports that hold orientation, and the spiral return.</div>
         </span>
         <span class="arrow">&rarr;</span>
       </a>
