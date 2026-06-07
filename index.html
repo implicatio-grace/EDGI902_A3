@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>EDGI902 A3 · Learning-as-Wayfinding — prototype &amp; companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f5f1;
+    --paper:#fbfaf6;
+    --paper-2:#f3efe5;
+    --ink:#1c1c1a;
+    --ink-2:#3b3a36;
+    --muted:#7a7872;
+    --muted-2:#9a9890;
+    --line:#d8d4ca;
+    --line-2:#bdb8aa;
+    --accent: oklch(0.55 0.07 245);
+    --accent-2: oklch(0.55 0.07 155);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-feature-settings:"ss01","cv11";-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:760px;margin:0 auto;padding:72px 32px 96px;}
+
+  .eyebrow{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:11px;
+    text-transform:uppercase;letter-spacing:0.16em;color:var(--muted);}
+  h1{font-family:"Fraunces","Source Serif Pro",Georgia,serif;font-weight:400;
+    font-size:40px;line-height:1.1;letter-spacing:-0.015em;margin:14px 0 0;text-wrap:balance;}
+  h1 em{font-style:italic;color:var(--ink-2);}
+  .lede{color:var(--muted);font-size:15px;line-height:1.6;max-width:60ch;margin:18px 0 0;}
+
+  .rule{height:1px;background:var(--line);border:0;margin:40px 0;}
+
+  .cards{display:grid;gap:18px;}
+  a.card{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:22px;
+    text-decoration:none;color:inherit;background:var(--paper);
+    border:1px solid var(--line);border-radius:10px;padding:26px 28px;
+    transition:border-color .18s ease, transform .18s ease, box-shadow .18s ease;}
+  a.card:hover{border-color:var(--line-2);transform:translateY(-2px);
+    box-shadow:0 10px 30px -18px rgba(0,0,0,.28);}
+  .num{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:12px;
+    color:#fff;background:var(--dot);width:34px;height:34px;border-radius:8px;
+    display:grid;place-items:center;letter-spacing:0.02em;}
+  .card.proto{--dot:var(--accent);}
+  .card.comp{--dot:var(--accent-2);}
+  .ctitle{font-family:"Fraunces","Source Serif Pro",Georgia,serif;font-size:21px;
+    font-weight:400;letter-spacing:-0.01em;}
+  .csub{color:var(--muted);font-size:13px;line-height:1.5;margin-top:5px;max-width:46ch;}
+  .arrow{font-size:20px;color:var(--muted-2);transition:transform .18s ease, color .18s ease;}
+  a.card:hover .arrow{transform:translateX(4px);color:var(--ink);}
+
+  .foot{margin-top:44px;font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;
+    font-size:10.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted-2);
+    line-height:1.9;}
+
+  @media (max-width:560px){
+    .wrap{padding:52px 22px 72px;}
+    h1{font-size:31px;}
+    a.card{grid-template-columns:auto 1fr;gap:16px;padding:22px;}
+    .arrow{display:none;}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow">EDGI902 · Assessment 3 · Learning Design Prototype</div>
+    <h1>Learning&nbsp;as&nbsp;Wayfinding — <em>the working prototype</em> and its evidence companion</h1>
+    <p class="lede">Two self-contained artefacts. Open the interactive prototype to walk the full learner journey; open the companion to trace every design move back to the readings, themes, and design principles behind it.</p>
+
+    <hr class="rule" />
+
+    <div class="cards">
+      <a class="card proto" href="prototype.html">
+        <span class="num">01</span>
+        <span>
+          <div class="ctitle">Working prototype — the full journey</div>
+          <div class="csub">Interactive walkthrough of the Learning-as-Wayfinding activity sequence (Activities 1–4).</div>
+        </span>
+        <span class="arrow">&rarr;</span>
+      </a>
+
+      <a class="card comp" href="companion.html">
+        <span class="num">02</span>
+        <span>
+          <div class="ctitle">Evidence architecture companion</div>
+          <div class="csub">Definitional canopy → readings → themes → design principles. The reasoning that grounds the prototype.</div>
+        </span>
+        <span class="arrow">&rarr;</span>
+      </a>
+    </div>
+
+    <div class="foot">
+      Kali Madden · EDGI902 A3 · June 2026<br>
+      Best viewed on a laptop or desktop · works in any modern browser
+    </div>
+  </div>
+</body>
+</html>

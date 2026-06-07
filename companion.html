@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Evidence architecture: definitional canopy, readings, themes, DPs · EDGI902 A3 · v6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f5f1;
+    --paper:#fbfaf6;
+    --paper-2:#f3efe5;
+    --ink:#1c1c1a;
+    --ink-2:#3b3a36;
+    --muted:#7a7872;
+    --muted-2:#9a9890;
+    --line:#d8d4ca;
+    --line-2:#bdb8aa;
+    --line-3:#a39e8f;
+    --rule:#e6e2d8;
+
+    /* source-literature clusters — shared chroma ~0.07, varied hue */
+    --hci: oklch(0.62 0.07 245);   /* HCI wayfinding — blue */
+    --hyp: oklch(0.62 0.07 55);    /* Hypertext — amber */
+    --sdl: oklch(0.55 0.07 155);   /* SDL — green */
+    --het: oklch(0.52 0.08 195);   /* Heutagogy — teal (split from SDL) */
+    --clt: oklch(0.57 0.10 30);    /* Cognitive load — terracotta (the big new cluster; slightly higher chroma to read as distinct) */
+    --cr:  oklch(0.55 0.07 330);   /* course-reading cluster — muted plum */
+    --af:  oklch(0.52 0.07 300);   /* Assessment & feedback — violet */
+    --tmp: oklch(0.56 0.07 265);   /* Temporal / social-time — indigo (8th cluster; beyond A3 scope) */
+    --org: oklch(0.50 0.06 95);    /* Organizational learning — olive (canopy-only: Argyris) */
+    --def: oklch(0.55 0.04 290);   /* definitional canopy */
+    --gap: oklch(0.50 0.09 25);    /* gap-framing */
+
+    --highlight: oklch(0.55 0.13 35);
+    --tension: oklch(0.62 0.13 60);
+    --convo: oklch(0.55 0.12 200);
+    --flag: oklch(0.55 0.10 280);  /* open-cell / KM-decision flag */
+    --dim:0.16;
+
+    --t1: oklch(0.32 0.04 250);
+    --t2: oklch(0.45 0.04 250);
+    --t3: oklch(0.6  0.03 250);
+    --t4: oklch(0.72 0.02 250);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;font-feature-settings:"ss01","cv11";}
+
+  .page{max-width:1760px;margin:0 auto;padding:30px 36px 52px;}
+
+  /* ===== Header ===== */
+  header.meta{
+    display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;
+    border-bottom:1px solid var(--rule);padding-bottom:16px;margin-bottom:14px;
+  }
+  .eyebrow{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);}
+  h1{font-family:"Fraunces","Source Serif Pro",Georgia,serif;font-weight:400;font-size:30px;line-height:1.15;margin:6px 0 0;letter-spacing:-0.01em;text-wrap:balance;}
+  h1 em{font-style:italic;color:var(--ink-2);}
+  .subtitle{color:var(--muted);font-size:12.5px;max-width:88ch;margin-top:8px;line-height:1.5;}
+  .meta-right{text-align:right;font-family:"JetBrains Mono",ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--muted);line-height:1.7;text-transform:uppercase;letter-spacing:0.08em;}
+  .meta-right .figcap{color:var(--ink-2);}
+
+  /* ===== Build-status strip (checkpoint marker — remove when fork lands) ===== */
+  .buildstatus{
+    margin:0 0 14px;padding:9px 14px;border-radius:6px;
+    background:color-mix(in oklch, var(--flag) 8%, var(--paper));
+    border:1px solid color-mix(in oklch, var(--flag) 35%, var(--line));
+    font-size:11.5px;color:var(--ink-2);line-height:1.5;
+    display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;
+  }
+  .buildstatus .tag{
+    font-family:"JetBrains Mono",monospace;font-size:9.5px;text-transform:uppercase;
+    letter-spacing:0.1em;color:var(--flag);border:1px solid color-mix(in oklch,var(--flag) 40%,var(--line));
+    padding:2px 7px;border-radius:3px;white-space:nowrap;
+  }
+  .buildstatus strong{color:var(--ink);font-weight:600;}
+
+  /* ===== Toolbar ===== */
+  .toolbar{
+    display:grid;grid-template-columns:1fr;gap:10px;
+    padding:12px 0 14px;border-bottom:1px solid var(--rule);margin-bottom:18px;
+    font-size:11.5px;color:var(--ink-2);
+  }
+  .toolbar-row{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;}
+  .legend{display:flex;gap:8px 16px;align-items:flex-start;flex-wrap:wrap;row-gap:8px;}
+  .legend-block{display:flex;gap:6px 10px;align-items:flex-start;flex-wrap:wrap;}
+  .legend-block + .legend-block{border-left:1px solid var(--rule);padding-left:14px;}
+  .legend-label{font-family:"JetBrains Mono",monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-right:4px;}
+  .swatch{width:10px;height:10px;border-radius:2px;display:inline-block;border:1px solid rgba(0,0,0,0.05);}
+  .swatch.hci{background:var(--hci);} .swatch.hyp{background:var(--hyp);} .swatch.sdl{background:var(--sdl);}
+  .swatch.het{background:var(--het);} .swatch.clt{background:var(--clt);}
+  .swatch.cr{background:var(--cr);} .swatch.af{background:var(--af);} .swatch.tmp{background:var(--tmp);}
+  .swatch.def{background:var(--def);} .swatch.gap{background:var(--gap);}
+  .legend-line{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
+  .legend-line svg{display:block;}
+  .tier-symbol{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--ink-2);}
+  .fn-symbol{font-family:"JetBrains Mono",monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.06em;border:1px solid var(--line-2);border-radius:3px;padding:1px 5px;color:var(--ink-2);background:var(--bg);}
+
+  .filters{display:flex;gap:6px;flex-wrap:wrap;}
+  .filters .label{font-family:"JetBrains Mono",monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-right:4px;align-self:center;}
+  .chip{
+    font-family:"Inter",sans-serif;font-size:11px;
+    padding:4px 9px;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);
+    border-radius:999px;cursor:pointer;transition:all 0.15s ease;
+  }
+  .chip:hover{border-color:var(--ink-2);}
+  .chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .chip.convo-chip.active{background:var(--convo);border-color:var(--convo);color:#fff;}
+  .chip.convo-chip.rationale{border-style:dashed;}
+  .chip.convo-chip.rationale.active{background:var(--convo);border-style:dashed;}
+  .chip.chain-chip.active{background:var(--highlight);border-color:var(--highlight);color:#fff;}
+  .chip.chain-chip.placeholder{opacity:0.5;border-style:dashed;cursor:pointer;}
+  .chip.chain-chip.placeholder.active{background:var(--muted);border-color:var(--muted);color:#fff;border-style:dashed;}
+  .chip.tension-chip.active{background:var(--tension);border-color:var(--tension);color:#fff;}
+
+  /* flag toggle (heutagogy split) */
+  .flagtoggle{display:inline-flex;gap:7px;align-items:center;font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;cursor:pointer;user-select:none;}
+  .flagtoggle input{accent-color:var(--het);width:13px;height:13px;cursor:pointer;}
+
+  /* theme-overlay mode toggle (segmented) */
+  .modetoggle{display:inline-flex;align-items:center;gap:8px;}
+  .modetoggle .label{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
+  .modetoggle button{
+    font-family:"Inter",sans-serif;font-size:11px;cursor:pointer;
+    padding:4px 10px;border:1px solid var(--line);background:var(--paper);color:var(--ink-2);
+    transition:all 0.15s ease;
+  }
+  .modetoggle button:first-of-type{border-radius:999px 0 0 999px;}
+  .modetoggle button:last-of-type{border-radius:0 999px 999px 0;border-left:none;}
+  .modetoggle button:hover{border-color:var(--ink-2);}
+  .modetoggle button.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+
+  /* (b) Conversations row renders identically in both overlays (unified — the
+     lean "primary analytical overlay" cue was removed; revisit post-A3). */
+  .primary-note{display:none;}
+  /* rich gives the theme bands the visible analytical weight */
+  body.mode-rich .theme{border-left:2px solid color-mix(in oklch,var(--highlight) 28%,var(--line));}
+  .theme .newtag{
+    margin-left:7px;font-family:"JetBrains Mono",monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.08em;
+    color:var(--highlight);border:1px solid color-mix(in oklch,var(--highlight) 40%,var(--line));border-radius:3px;padding:0 4px;vertical-align:1px;
+  }
+
+  /* ===== Diagram area ===== */
+  .diagram-wrap{
+    position:relative;background:var(--paper);
+    border:1px solid var(--rule);border-radius:6px;
+    padding:22px 24px 24px;
+  }
+
+  /* Canopy strip ----------------------------------------------- */
+  .canopy{
+    position:relative;z-index:3;
+    background:linear-gradient(180deg, var(--paper-2) 0%, transparent 100%);
+    border:1px dashed var(--line-2);border-radius:5px;
+    padding:10px 12px 12px;
+    margin-bottom:18px;
+  }
+  .canopy-head{
+    display:flex;justify-content:space-between;align-items:baseline;
+    font-family:"JetBrains Mono",monospace;font-size:10px;
+    text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);
+    margin-bottom:9px;
+  }
+  .canopy-head .lhs{display:flex;gap:8px;align-items:center;}
+  .canopy-head .lhs .swatch{width:7px;height:7px;}
+  .canopy-grid{
+    display:grid;
+    grid-template-columns: 2.1fr 1.45fr 0.7fr 0.95fr 1.35fr;
+    gap:0 14px;
+    align-items:stretch;
+  }
+  .canopy-group{
+    border-right:1px dotted var(--line);
+    padding-right:14px;
+    display:flex;flex-direction:column;gap:6px;
+  }
+  .canopy-group:last-child{border-right:none;padding-right:0;}
+  .canopy-group .grouplabel{
+    font-family:"JetBrains Mono",monospace;font-size:9px;
+    text-transform:uppercase;letter-spacing:0.1em;color:var(--muted-2);
+    margin-bottom:1px;
+  }
+  .canopy-group .grouplabel .horizon-tag{
+    color:var(--tmp);border:1px solid color-mix(in oklch,var(--tmp) 40%,var(--line));
+    border-radius:3px;padding:0 4px;letter-spacing:0.06em;margin-left:5px;font-size:8px;
+  }
+  .canopy-cards{display:grid;grid-template-columns:1fr 1fr;gap:6px;align-content:start;}
+  .canopy-group.single .canopy-cards{grid-template-columns:1fr;}
+  .def-card{
+    background:var(--paper);border:1px solid var(--line);border-radius:4px;
+    padding:7px 9px 8px;cursor:pointer;transition:all 0.15s ease;position:relative;
+    line-height:1.3;
+  }
+  .def-card::before{
+    content:"";position:absolute;left:-1px;top:-1px;bottom:-1px;width:3px;
+    background:var(--accent, var(--def));border-radius:4px 0 0 4px;opacity:0.7;
+  }
+  .def-card[data-cluster="clt"]{--accent:var(--clt);}
+  .def-card[data-cluster="het"]{--accent:var(--het);}
+  .def-card[data-cluster="org"]{--accent:var(--org);}
+  .def-card[data-cluster="tmp"]{--accent:var(--tmp);}
+  .def-card:hover{border-color:var(--ink-2);background:#fffefa;}
+  .def-card.active{border-color:var(--highlight);background:#fffefa;box-shadow:0 0 0 1px var(--highlight) inset;}
+  .def-card .ref{font-family:"Fraunces",Georgia,serif;font-size:12px;font-weight:500;color:var(--ink);letter-spacing:-0.005em;}
+  .def-card .ref .yr{color:var(--muted);font-weight:400;}
+  .def-card .role{
+    font-family:"JetBrains Mono",monospace;font-size:8.5px;
+    color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;
+    margin-top:3px;line-height:1.35;
+  }
+  .def-card .fn-badge{
+    display:inline-block;margin-top:5px;
+    font-family:"JetBrains Mono",monospace;font-size:8px;text-transform:uppercase;letter-spacing:0.07em;
+    padding:1px 5px;border-radius:3px;border:1px solid var(--line-2);
+    color:var(--ink-2);background:var(--bg);white-space:nowrap;
+  }
+  .def-card .fn-badge.construct{border-color:color-mix(in oklch,var(--def) 45%,var(--line));color:var(--def);}
+  .def-card .fn-badge.framework{border-color:color-mix(in oklch,var(--hci) 45%,var(--line));color:var(--hci);}
+  .def-card .fn-badge.method{border-color:color-mix(in oklch,var(--sdl) 45%,var(--line));color:var(--sdl);}
+  .def-card .fn-badge.context{border-color:color-mix(in oklch,var(--hyp) 45%,var(--line));color:var(--hyp);}
+
+  /* HK trio — grouped canopy unit (cite-divide) */
+  .def-card.trio{background:color-mix(in oklch,var(--het) 5%,var(--paper));border-style:solid;}
+  .def-card.trio[data-cluster="tmp"]{background:color-mix(in oklch,var(--tmp) 6%,var(--paper));}
+  /* Beyond-A3-scope canopy node — dimmed by default (out-of-scope root), restored on hover/active */
+  .def-card.horizon{opacity:0.58;}
+  .def-card.horizon:hover{opacity:1;}
+  body.has-active .def-card.horizon.active,
+  body.has-active .def-card.horizon.related,
+  body.has-active .def-card.horizon.in-conversation{opacity:1;}
+  /* canopy inline note (cite-divide caveats, venue, tier≠load) */
+  .def-card .canopy-note{font-size:9px;color:var(--muted);font-style:italic;margin-top:5px;line-height:1.4;}
+  .def-card.trio .canopy-note{margin-top:4px;}
+  .def-card.trio .triolist{margin-top:4px;display:flex;flex-direction:column;gap:2px;}
+  .def-card.trio .triolist span{font-family:"JetBrains Mono",monospace;font-size:8.5px;color:var(--ink-2);line-height:1.3;}
+  .def-card.trio .triolist b{color:var(--ink);font-weight:600;}
+
+  .def-card .flagdot{
+    position:absolute;top:6px;right:7px;font-size:9px;color:var(--flag);
+    font-family:"JetBrains Mono",monospace;cursor:help;
+  }
+
+  /* ===== Main 4-column area ===== */
+  .columns{
+    display:grid;
+    grid-template-columns: 0.5fr 1.25fr 0.78fr 0.95fr;
+    gap:0;position:relative;
+  }
+  .col{position:relative;z-index:2;padding:0 5px;}
+  .col-head{
+    font-family:"JetBrains Mono",monospace;font-size:10px;
+    text-transform:uppercase;letter-spacing:0.14em;color:var(--muted);
+    padding-bottom:9px;border-bottom:1px solid var(--rule);margin-bottom:14px;
+    display:flex;justify-content:space-between;gap:8px;
+  }
+  .col-head .count{color:var(--ink-2);text-align:right;}
+
+  /* Gap framing column */
+  .gap-card{
+    background:var(--paper);border:1px solid var(--line);border-radius:5px;
+    padding:9px 10px 10px;margin-bottom:8px;cursor:pointer;transition:all 0.15s ease;
+    position:relative;line-height:1.35;
+  }
+  .gap-card::before{content:"";position:absolute;left:-1px;top:-1px;bottom:-1px;width:3px;background:var(--gap);border-radius:5px 0 0 5px;}
+  .gap-card.rationale-gap::before{background:repeating-linear-gradient(180deg,var(--gap) 0 4px,transparent 4px 8px);}
+  .gap-card:hover{border-color:var(--ink-2);background:#fffefa;}
+  .gap-card.active{border-color:var(--highlight);background:#fffefa;box-shadow:0 0 0 1px var(--highlight) inset;}
+  .gap-card .ref{font-family:"Fraunces",Georgia,serif;font-size:12.5px;font-weight:500;color:var(--ink);}
+  .gap-card .ref .yr{color:var(--muted);font-weight:400;}
+  .gap-card .gist{font-size:10.5px;color:var(--ink-2);line-height:1.4;margin-top:5px;}
+  .gap-card .targets{
+    font-family:"JetBrains Mono",monospace;font-size:9px;
+    color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;
+    margin-top:5px;
+  }
+  .gap-card .flagdot{position:absolute;top:8px;right:8px;font-size:9px;color:var(--flag);font-family:"JetBrains Mono",monospace;cursor:help;}
+
+  /* Cluster header (readings col) */
+  .cluster{margin-bottom:14px;}
+  .cluster-head{
+    font-family:"Inter",sans-serif;font-size:10px;font-weight:600;
+    text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-2);
+    display:flex;align-items:center;gap:7px;margin:0 4px 7px;
+  }
+  .cluster-head .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .cluster.hci .dot{background:var(--hci);} .cluster.hyp .dot{background:var(--hyp);} .cluster.sdl .dot{background:var(--sdl);}
+  .cluster.het .dot{background:var(--het);} .cluster.clt .dot{background:var(--clt);}
+  .cluster.cr .dot{background:var(--cr);} .cluster.af .dot{background:var(--af);}
+  .cluster .cluster-label{flex:1;}
+  .cluster .cluster-count{font-family:"JetBrains Mono",monospace;color:var(--muted);font-weight:400;font-size:9.5px;white-space:nowrap;}
+  .cluster.new-cluster .cluster-label::after{
+    content:"new";margin-left:7px;font-family:"JetBrains Mono",monospace;font-size:8px;
+    text-transform:uppercase;letter-spacing:0.08em;color:var(--clt);
+    border:1px solid color-mix(in oklch,var(--clt) 40%,var(--line));border-radius:3px;padding:0 4px;
+    font-weight:400;vertical-align:1px;
+  }
+  /* sub-group divider inside a merged SDL & heutagogy cluster */
+  .subgroup-label{
+    font-family:"JetBrains Mono",monospace;font-size:8.5px;text-transform:uppercase;letter-spacing:0.09em;
+    color:var(--muted-2);margin:6px 4px 4px;display:flex;align-items:center;gap:6px;
+  }
+  .subgroup-label::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--het);}
+
+  /* Reading card */
+  .reading{
+    background:var(--paper);border:1px solid var(--line);border-radius:5px;
+    padding:8px 10px 9px;margin-bottom:5px;cursor:pointer;
+    transition:all 0.15s ease;position:relative;line-height:1.32;
+  }
+  .reading.bridging{border-style:dashed;background:transparent;}
+  .reading.t4{opacity:0.62;background:transparent;}
+  .reading.t4:hover{opacity:0.92;}
+  .reading:hover{border-color:var(--ink-2);background:#fffefa;}
+  .reading.active{border-color:var(--highlight);background:#fffefa;box-shadow:0 0 0 1px var(--highlight) inset;opacity:1;}
+  .reading.related{opacity:1;}
+  .reading.in-conversation{
+    border-color:var(--convo);
+    box-shadow:0 0 0 1px var(--convo) inset;
+    opacity:1;
+  }
+  .gap-card.in-conversation,
+  .theme.in-conversation,
+  .dp.in-conversation,
+  .def-card.in-conversation{
+    border-color:var(--convo);
+    box-shadow:0 0 0 1px var(--convo) inset;
+    opacity:1;
+  }
+
+  .reading .row1{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+  .reading .ref{font-family:"Fraunces",Georgia,serif;font-size:12.5px;font-weight:500;color:var(--ink);letter-spacing:-0.005em;}
+  .reading .ref .yr{color:var(--muted);font-weight:400;}
+  .reading .tier{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:1px;color:var(--ink-2);white-space:nowrap;}
+  .reading.t1 .tier{color:var(--t1);} .reading.t2 .tier{color:var(--t2);}
+  .reading.t3 .tier{color:var(--t3);} .reading.t4 .tier{color:var(--t4);}
+
+  .reading .meta-row,
+  .def-card .meta-row{
+    display:flex;gap:5px;flex-wrap:wrap;margin-top:4px;
+    font-family:"JetBrains Mono",monospace;font-size:9px;
+    color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;
+  }
+  /* canopy: badge row matches the function-badge size and sits inline */
+  .def-card .meta-row{font-size:8px;align-items:center;}
+  .def-card .meta-row .fn-badge{margin-top:0;}
+  .badge{
+    display:inline-flex;align-items:center;gap:3px;
+    padding:1px 5px;border:1px solid var(--line);
+    border-radius:3px;background:var(--bg);white-space:nowrap;
+  }
+  .badge.method{color:var(--ink-2);}
+  .badge.tier-text{color:var(--ink-2);background:transparent;border-color:var(--line-2);}
+  .badge.cites{color:var(--muted);font-variant-numeric:tabular-nums;}
+  .badge.note{color:var(--ink-2);background:transparent;border-color:var(--line-2);}
+  .badge.flag-cell{
+    color:var(--flag);border-color:color-mix(in oklch,var(--flag) 45%,var(--line));
+    background:color-mix(in oklch,var(--flag) 8%,transparent);cursor:help;
+  }
+  .badge.tension-flag{
+    color:var(--tension);
+    border-color:color-mix(in oklch, var(--tension) 50%, var(--line));
+    background:color-mix(in oklch, var(--tension) 8%, transparent);
+    cursor:pointer;
+  }
+  .badge.tension-flag:hover{background:color-mix(in oklch, var(--tension) 18%, transparent);}
+
+  .reading .stat{margin-top:4px;font-size:10.5px;color:var(--ink-2);font-family:"JetBrains Mono",monospace;line-height:1.4;}
+  .reading .stat em{font-style:italic;color:var(--muted);}
+  .reading .subnote{margin-top:4px;font-size:10px;color:var(--muted);font-style:italic;line-height:1.4;}
+  .tension-body{
+    display:none;margin-top:5px;padding:5px 7px;
+    background:color-mix(in oklch, var(--tension) 6%, var(--paper));
+    border:1px solid color-mix(in oklch, var(--tension) 25%, var(--line));
+    border-radius:3px;font-size:10px;line-height:1.45;color:var(--ink-2);
+  }
+  .reading.tension-open .tension-body,
+  .def-card.tension-open .tension-body{display:block;}
+  .tension-body strong{font-weight:600;color:var(--ink);}
+
+  .cluster.hci .reading::before,.cluster.hyp .reading::before,.cluster.sdl .reading::before,
+  .cluster.het .reading::before,.cluster.clt .reading::before,.cluster.cr .reading::before,.cluster.af .reading::before{
+    content:"";position:absolute;left:-1px;top:-1px;bottom:-1px;width:3px;border-radius:5px 0 0 5px;
+  }
+  /* per-card accent keyed off the reading's own data-lit so merged clusters stay colour-true */
+  .reading[data-lit="hci"]::before{background:var(--hci);}
+  .reading[data-lit="hyp"]::before{background:var(--hyp);}
+  .reading[data-lit="sdl"]::before{background:var(--sdl);}
+  .reading[data-lit="het"]::before{background:var(--het);}
+  .reading[data-lit="clt"]::before{background:var(--clt);}
+  .reading[data-lit="cr"]::before{background:var(--cr);}
+  .reading[data-lit="af"]::before{background:var(--af);}
+  .reading.bridging[data-lit="hci"]::before{background:repeating-linear-gradient(180deg,var(--hci) 0 4px,transparent 4px 8px);}
+  .reading.bridging[data-lit="hyp"]::before{background:repeating-linear-gradient(180deg,var(--hyp) 0 4px,transparent 4px 8px);}
+  .reading.bridging[data-lit="sdl"]::before{background:repeating-linear-gradient(180deg,var(--sdl) 0 4px,transparent 4px 8px);}
+
+  /* Theme card */
+  .theme{
+    background:var(--paper);border:1px solid var(--line);border-radius:5px;
+    padding:10px 12px;margin-bottom:12px;cursor:pointer;transition:all 0.15s ease;position:relative;
+  }
+  .theme:hover{border-color:var(--ink-2);}
+  .theme.active{border-color:var(--highlight);box-shadow:0 0 0 1px var(--highlight) inset;}
+  .theme .num{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--muted);letter-spacing:0.08em;}
+  .theme .title{font-family:"Fraunces",Georgia,serif;font-weight:400;font-size:13.5px;line-height:1.3;color:var(--ink);margin-top:2px;text-wrap:balance;}
+  .theme .gloss{font-size:10.5px;color:var(--muted);line-height:1.45;margin-top:5px;}
+  .theme-fork-note{
+    border:1px dashed color-mix(in oklch,var(--flag) 40%,var(--line));
+    border-radius:5px;padding:9px 11px;margin-bottom:12px;
+    background:color-mix(in oklch,var(--flag) 5%,transparent);
+    font-size:10px;color:var(--ink-2);line-height:1.45;
+  }
+  .theme-fork-note .h{font-family:"JetBrains Mono",monospace;font-size:8.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--flag);margin-bottom:4px;}
+
+  /* DP card */
+  .dp{
+    background:var(--paper);border:1px solid var(--line);border-radius:5px;
+    padding:11px 13px 12px;margin-bottom:10px;cursor:pointer;transition:all 0.15s ease;position:relative;
+  }
+  .dp:hover{border-color:var(--ink-2);}
+  .dp.active{border-color:var(--highlight);box-shadow:0 0 0 1px var(--highlight) inset;}
+  .dp::before{content:"";position:absolute;left:-1px;top:-1px;bottom:-1px;width:3px;background:var(--ink);border-radius:5px 0 0 5px;}
+  .dp .id{font-family:"JetBrains Mono",monospace;font-size:9.5px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;}
+  .dp .title{font-family:"Fraunces",Georgia,serif;font-weight:500;font-size:14px;line-height:1.25;color:var(--ink);margin-top:3px;letter-spacing:-0.005em;}
+  .dp .gist{font-size:10.5px;color:var(--ink-2);line-height:1.5;margin-top:5px;}
+
+  .dp .strength{
+    display:flex;align-items:center;gap:8px;margin-top:8px;
+    padding-top:7px;border-top:1px dashed var(--rule);
+  }
+  .dp .strength-label{font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;min-width:60px;}
+  .dp .strength-value{font-family:"Inter",sans-serif;font-size:10.5px;font-weight:600;color:var(--ink-2);letter-spacing:0.01em;}
+  .dp .strength-bar{display:flex;flex:1;height:6px;border:1px solid var(--line-2);border-radius:2px;overflow:hidden;background:var(--bg);}
+  .dp .strength-bar .seg{flex:1;border-right:1px solid var(--bg);}
+  .dp .strength-bar .seg:last-child{border-right:none;}
+  .dp .strength-bar .seg.t1{background:var(--t1);}
+  .dp .strength-bar .seg.t2{background:var(--t2);}
+  .dp .strength-bar .seg.t3{background:var(--t3);}
+  .dp .strength-bar .seg.t4{background:var(--t4);}
+  .dp .asymmetry-note{
+    margin-top:5px;font-size:9.5px;color:var(--tension);font-family:"JetBrains Mono",monospace;
+    line-height:1.4;display:flex;gap:5px;
+  }
+  .dp .asymmetry-note .marker{flex-shrink:0;}
+  .dp .rationale-flag{
+    margin-top:5px;font-size:9.5px;color:var(--flag);font-family:"JetBrains Mono",monospace;
+    line-height:1.4;display:flex;gap:5px;
+  }
+  .dp .rationale-flag .marker{flex-shrink:0;}
+
+  /* SVG overlay */
+  svg.links{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;}
+  svg.links path{fill:none;stroke:var(--line-2);transition:stroke 0.18s ease, stroke-width 0.18s ease, opacity 0.18s ease;}
+
+  /* Edge-weight treatments */
+  svg.links path.mechanistic{stroke:var(--line-3);stroke-width:1.9;}
+  svg.links path.directly-defensible{stroke:var(--line-2);stroke-width:1.2;}
+  svg.links path.defensible{stroke:var(--line-2);stroke-width:1.2;}
+  svg.links path.interpretive{stroke:var(--line-2);stroke-width:1;stroke-dasharray:1 4;stroke-linecap:round;}
+  svg.links path.consistent-with{stroke:var(--line-2);stroke-width:0.9;stroke-dasharray:3 3;}
+  svg.links path.supporting{stroke:var(--line-2);stroke-width:0.9;stroke-dasharray:3 3;}
+  svg.links path.primary{stroke:var(--line-2);stroke-width:1.2;}
+  svg.links path.canopy-link{stroke:var(--def);stroke-width:0.7;stroke-dasharray:2 4;opacity:0.42;}
+  svg.links path.gap-link{stroke:var(--gap);stroke-width:0.9;stroke-dasharray:4 3;opacity:0.5;}
+  svg.links path.gap-link.rationale{stroke-dasharray:2 5;opacity:0.4;}
+  svg.links path.conversation{stroke:var(--convo);stroke-width:1.6;stroke-dasharray:none;opacity:0;}
+  svg.links path.conversation.rationale{stroke-dasharray:4 4;stroke-width:1.2;}
+  svg.links path.chain-link{stroke:var(--highlight);stroke-width:2;opacity:0;}
+  svg.links path.chain-link.placeholder{stroke:var(--muted);stroke-dasharray:5 4;stroke-width:1.4;}
+  svg.links path.chain-link.show{opacity:1;}
+
+  svg.links path.highlight{stroke:var(--highlight);opacity:1;}
+  svg.links path.mechanistic.highlight{stroke-width:2.1;}
+  svg.links path.directly-defensible.highlight,svg.links path.defensible.highlight{stroke-width:1.6;}
+  svg.links path.interpretive.highlight{stroke-width:1.4;}
+  svg.links path.consistent-with.highlight,
+  svg.links path.supporting.highlight,
+  svg.links path.primary.highlight{stroke-width:1.5;}
+  svg.links path.canopy-link.highlight{stroke:var(--def);stroke-width:1.6;opacity:1;stroke-dasharray:none;}
+  svg.links path.gap-link.highlight{stroke:var(--gap);stroke-width:1.6;opacity:1;stroke-dasharray:none;}
+  svg.links path.conversation.show{opacity:1;}
+
+  body.has-active svg.links path:not(.highlight):not(.show){opacity:var(--dim);}
+  body.has-active .reading:not(.active):not(.related):not(.in-conversation),
+  body.has-active .theme:not(.active):not(.related):not(.in-conversation),
+  body.has-active .dp:not(.active):not(.related):not(.in-conversation),
+  body.has-active .def-card:not(.active):not(.related):not(.in-conversation),
+  body.has-active .gap-card:not(.active):not(.related):not(.in-conversation){opacity:var(--dim);}
+
+  /* Conversation banner */
+  .convo-banner{
+    display:none;
+    background:color-mix(in oklch, var(--convo) 9%, var(--paper));
+    border:1px solid color-mix(in oklch, var(--convo) 40%, var(--line));
+    border-radius:4px;padding:8px 12px;margin-bottom:10px;
+    font-size:11px;color:var(--ink-2);line-height:1.45;
+  }
+  .convo-banner.show{display:block;}
+  .convo-banner.rationale{border-style:dashed;background:color-mix(in oklch,var(--convo) 5%,var(--paper));}
+  .convo-banner .name{font-family:"Fraunces",Georgia,serif;font-style:italic;color:var(--ink);font-weight:500;}
+  .convo-banner .lineage{font-family:"JetBrains Mono",monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.08em;color:var(--convo);margin-left:8px;}
+  .convo-banner .desc{margin-top:3px;color:var(--ink-2);}
+  .convo-banner strong{color:var(--ink);font-weight:500;}
+
+  /* Footer caption */
+  .caption{
+    margin-top:20px;padding-top:16px;border-top:1px solid var(--rule);
+    font-size:11px;color:var(--muted);line-height:1.55;
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:30px;
+  }
+  .caption strong{color:var(--ink-2);font-weight:500;}
+  .caption .h{font-family:"JetBrains Mono",monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink-2);margin-bottom:6px;}
+  .footnote{margin-top:12px;font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;text-align:right;}
+
+  /* How-to-use strip */
+  .howto{
+    margin-top:10px;padding:10px 14px;
+    border:1px solid var(--rule);border-radius:6px;
+    background:#fbfaf6;
+    display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline;
+    font-size:11.5px;color:var(--ink-2);line-height:1.5;
+  }
+  .howto .h{
+    font-family:"JetBrains Mono",monospace;font-size:9.5px;
+    text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);
+    margin-right:4px;
+  }
+  .howto .tip{display:inline-flex;align-items:baseline;gap:6px;}
+  .howto kbd{
+    font-family:"JetBrains Mono",monospace;font-size:10px;
+    background:#fff;border:1px solid var(--rule);border-bottom-width:1.5px;
+    border-radius:3px;padding:1px 5px;color:var(--ink);
+    text-transform:lowercase;letter-spacing:0;
+  }
+  .howto .sep{color:var(--rule);}
+  @media print{ .howto{background:transparent;} }
+
+  /* Print */
+  @media print{
+    @page{size:A3 landscape;margin:12mm;}
+    html,body{background:#fff;}
+    .toolbar .filters{display:none;}
+    .buildstatus{break-inside:avoid;}
+    .diagram-wrap{border:none;padding:0;}
+    .reading,.theme,.dp,.def-card,.gap-card{break-inside:avoid;}
+    .reading.t4{opacity:1;}
+    .reading.tension-open .tension-body{display:block;}
+    body.has-active .reading:not(.active):not(.related):not(.in-conversation),
+    body.has-active .theme:not(.active):not(.related):not(.in-conversation),
+    body.has-active .dp:not(.active):not(.related):not(.in-conversation),
+    body.has-active .def-card:not(.active):not(.related):not(.in-conversation),
+    body.has-active .gap-card:not(.active):not(.related):not(.in-conversation){opacity:1;}
+    body.has-active svg.links path:not(.highlight):not(.show){opacity:1;}
+  }
+
+  @media (max-width: 1280px){
+    .columns{grid-template-columns:1fr;}
+    .canopy-grid{grid-template-columns:1fr 1fr;}
+    svg.links{display:none;}
+    .col{margin-bottom:30px;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="meta">
+    <div>
+      <div class="eyebrow">EDGI902 · Assessment 3 · Evidence architecture · Interactive companion</div>
+      <h1>The architecture of the argument<br/><em>Definitional canopy → readings → themes → design principles</em></h1>
+      <div class="subtitle">The A3 evidence network after the CLT, heutagogy + temporal batches: <strong>59 papers</strong> (26 A2-baseline + 33 A3; 3 reserve excluded) across four layers. A function-graded <strong>definitional canopy</strong> (top) supplies constructs, frameworks, context and method — now with a <strong>Temporal / social-time</strong> group warranting the learner-owned temporal register (design-led, evidence-convergent); <strong>gap-framing papers</strong> (left) open the argumentative space; readings cluster by source literature into <strong>cross-cutting themes</strong> that justify four <strong>design principles (DPs)</strong>. Edge weight encodes evidential directness; tier dots encode journal standing; ⚠ markers surface productive tensions and citation-confidence flags. The <em>Conversations</em> filter traces eleven cross-paper exchanges and the designer-to-learner causal chain.</div>
+    </div>
+    <div class="meta-right">
+      Kali Madden · v6<br/>
+      6 June 2026<br/>
+      <span class="figcap">A3 thinking tool</span>
+    </div>
+  </header>
+
+  <div class="buildstatus">
+    <span class="tag">A2 / A3 · theme overlay</span>
+    <span><strong>Design forces commits the evidence is not ready for.</strong> One artefact, two variants — flip <span style="color:var(--ink)">Theme overlay</span> in the toolbar. <strong>Lean (4 bands, broadened)</strong> keeps the A2 set informing the original 4 DPs and leans on the <strong>conversations layer</strong> to carry the analysis. <strong>Rich (6 bands)</strong> brings in new themes informing the broader platform concept beyond the onboarding slice. Now the full analytical structure is explicit: Theme 5 (expertise-adaptive support) + Theme 6 (capability across passes) carry the CLT/heutagogy convergences as theme bands.</span>
+  </div>
+
+  <div class="toolbar">
+    <div class="toolbar-row">
+      <div class="legend">
+        <div class="legend-block">
+          <span class="legend-label">Lit</span>
+          <span class="legend-line"><span class="swatch hci"></span> HCI</span>
+          <span class="legend-line"><span class="swatch hyp"></span> Hypertext</span>
+          <span class="legend-line"><span class="swatch clt"></span> Cognitive load</span>
+          <span class="legend-line"><span class="swatch sdl"></span> SDL</span>
+          <span class="legend-line"><span class="swatch het"></span> Heutagogy</span>
+          <span class="legend-line"><span class="swatch cr"></span> Course</span>
+          <span class="legend-line"><span class="swatch af"></span> Assessment</span>
+          <span class="legend-line"><span class="swatch tmp"></span> Temporal</span>
+          <span class="legend-line"><span class="swatch def"></span> Definitional</span>
+          <span class="legend-line"><span class="swatch gap"></span> Gap</span>
+        </div>
+        <div class="legend-block">
+          <span class="legend-label">Tier</span>
+          <span class="legend-line"><span class="tier-symbol" style="color:var(--t1)">●●●●</span> flagship</span>
+          <span class="legend-line"><span class="tier-symbol" style="color:var(--t2)">●●●○</span> strong</span>
+          <span class="legend-line"><span class="tier-symbol" style="color:var(--t3)">●●○○</span> specialist</span>
+          <span class="legend-line"><span class="tier-symbol" style="color:var(--t4)">●○○○</span> limited</span>
+        </div>
+        <div class="legend-block">
+          <span class="legend-label">Canopy</span>
+          <span class="legend-line"><span class="fn-symbol">construct</span></span>
+          <span class="legend-line"><span class="fn-symbol">framework</span></span>
+          <span class="legend-line"><span class="fn-symbol">context</span></span>
+          <span class="legend-line"><span class="fn-symbol">method</span></span>
+        </div>
+        <div class="legend-block">
+          <span class="legend-label">Edge</span>
+          <span class="legend-line"><svg width="22" height="6"><line x1="0" y1="3" x2="22" y2="3" stroke="#a39e8f" stroke-width="1.9"/></svg> mechanistic</span>
+          <span class="legend-line"><svg width="22" height="6"><line x1="0" y1="3" x2="22" y2="3" stroke="#bdb8aa" stroke-width="1.2"/></svg> defensible</span>
+          <span class="legend-line"><svg width="22" height="6"><line x1="0" y1="3" x2="22" y2="3" stroke="#bdb8aa" stroke-width="1" stroke-dasharray="1 4" stroke-linecap="round"/></svg> interpretive</span>
+          <span class="legend-line"><svg width="22" height="6"><line x1="0" y1="3" x2="22" y2="3" stroke="#bdb8aa" stroke-width="0.9" stroke-dasharray="3 3"/></svg> consistent-with</span>
+        </div>
+      </div>
+    </div>
+    <div class="toolbar-row">
+      <div class="filters">
+        <span class="label">Focus</span>
+        <button class="chip active" data-filter="all">All</button>
+        <button class="chip" data-filter="dp1">DP1</button>
+        <button class="chip" data-filter="dp2">DP2</button>
+        <button class="chip" data-filter="dp3">DP3</button>
+        <button class="chip" data-filter="dp4">DP4</button>
+        <button class="chip" data-filter="hci">HCI</button>
+        <button class="chip" data-filter="hyp">Hypertext</button>
+        <button class="chip" data-filter="clt">CLT</button>
+        <button class="chip" data-filter="sdl">SDL</button>
+        <button class="chip" data-filter="het">Heutagogy</button>
+        <button class="chip" data-filter="cr">Course</button>
+        <button class="chip" data-filter="af">Assessment</button>
+        <button class="chip" data-filter="tmp">Temporal</button>
+        <button class="chip" data-filter="def">Definitional</button>
+        <button class="chip tension-chip" data-filter="tensions">⚠ Tensions</button>
+      </div>
+      <label class="flagtoggle"><input type="checkbox" id="split-toggle" checked /> Heutagogy split from SDL</label>
+      <div class="modetoggle" id="mode-toggle">
+        <span class="label">Theme overlay</span>
+        <button data-mode="lean">A2 · Lean 4</button>
+        <button data-mode="rich">A3 · Rich 6</button>
+      </div>
+    </div>
+    <div class="toolbar-row" id="convo-row">
+      <div class="filters">
+        <span class="label">Conversations<span class="primary-note"> · primary analytical overlay</span></span>
+        <button class="chip convo-chip" data-convo="c1">1 · Structure–legibility chain</button>
+        <button class="chip convo-chip" data-convo="c2">2 · Disorientation paradox</button>
+        <button class="chip convo-chip" data-convo="c3">3 · Expertise reversal</button>
+        <button class="chip convo-chip" data-convo="c4">4 · Signalling → DP2</button>
+        <button class="chip convo-chip" data-convo="c5">5 · CLT ↔ agency axis</button>
+        <button class="chip convo-chip" data-convo="c6">6 · Disorientation ↔ wayfinding</button>
+        <button class="chip convo-chip" data-convo="c7">7 · Axis · designed-not-granted</button>
+        <button class="chip convo-chip" data-convo="c8">8 · Capacity-over-completion</button>
+        <button class="chip convo-chip" data-convo="c9">9 · Spiral · across-pass</button>
+        <button class="chip convo-chip rationale" data-convo="c10">10 · Heutagogy evidence-gap</button>
+        <button class="chip convo-chip" data-convo="c11">11 · Learner-owned temporal register</button>
+        <button class="chip convo-chip chain-chip" data-convo="chain">⟶ Causal chain</button>
+        <button class="chip convo-chip chain-chip placeholder" data-convo="chain2">⟶ Axis/spiral chain (post-A3)</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="howto" aria-label="How to use this interactive">
+    <span class="h">How to use</span>
+    <span class="tip"><kbd>hover</kbd> any card to highlight its connections</span>
+    <span class="sep">·</span>
+    <span class="tip"><kbd>click</kbd> a card to lock the highlight; click empty space to release</span>
+    <span class="sep">·</span>
+    <span class="tip"><kbd>click</kbd> a ⚠ marker to reveal a tension</span>
+    <span class="sep">·</span>
+    <span class="tip"><kbd>Focus</kbd> chips filter to one DP, cluster, or all tensions</span>
+    <span class="sep">·</span>
+    <span class="tip"><kbd>Conversations</kbd> chips draw cross-paper arcs and a banner</span>
+  </div>
+
+  <div class="diagram-wrap" id="diagram">
+
+    <div class="convo-banner" id="convo-banner">
+      <span class="name" id="convo-name"></span><span class="lineage" id="convo-lineage"></span>
+      <div class="desc" id="convo-desc"></div>
+    </div>
+
+    <!-- ===== Definitional canopy (function badges, not tier dots) ===== -->
+    <div class="canopy" id="canopy">
+      <div class="canopy-head">
+        <span class="lhs"><span class="swatch def"></span> Definitional canopy · graded by function, not tier · constructs · frameworks · context · method</span>
+        <span id="canopy-count">17 nodes</span>
+      </div>
+      <div class="canopy-grid" id="canopy-grid"></div>
+    </div>
+
+    <!-- ===== 4-column grid ===== -->
+    <div class="columns" id="cols">
+
+      <div class="col" id="col-gap">
+        <div class="col-head"><span>Gap framing</span><span class="count">3</span></div>
+      </div>
+
+      <div class="col" id="col-readings">
+        <div class="col-head"><span>Readings</span><span class="count" id="readings-count"></span></div>
+      </div>
+
+      <div class="col" id="col-themes">
+        <div class="col-head"><span>Cross-cutting themes</span><span class="count" id="themes-count"></span></div>
+        <div id="themes-host"></div>
+      </div>
+
+      <div class="col" id="col-dps">
+        <div class="col-head"><span>Design principles</span><span class="count">4</span></div>
+
+        <div class="dp" data-id="dp1">
+          <div class="id">DP1 · Legibility</div>
+          <div class="title">Legible information architecture</div>
+          <div class="gist">Clear categorical labels, multiple access routes, learner-vocabulary terms — so learners can form an accurate mental model on entry.</div>
+          <div class="strength">
+            <span class="strength-label">Evidence</span>
+            <span class="strength-value">Strong</span>
+            <span class="strength-bar" title="Tier composition of supporting evidence">
+              <span class="seg t1"></span><span class="seg t1"></span><span class="seg t2"></span><span class="seg t2"></span><span class="seg t3"></span>
+            </span>
+          </div>
+        </div>
+
+        <div class="dp" data-id="dp2">
+          <div class="id">DP2 · Signposting</div>
+          <div class="title">Disorientation prevention through structural signposting</div>
+          <div class="gist">Persistent, hierarchical, fixed-position cues — breadcrumbs, side nav, progress, "you-are-here". Embedded in structure, not interruptive.</div>
+          <div class="strength">
+            <span class="strength-label">Evidence</span>
+            <span class="strength-value">Strongest · mechanistic core</span>
+            <span class="strength-bar" title="Tier composition of supporting evidence">
+              <span class="seg t1"></span><span class="seg t1"></span><span class="seg t1"></span><span class="seg t2"></span><span class="seg t2"></span><span class="seg t2"></span><span class="seg t3"></span><span class="seg t4"></span>
+            </span>
+          </div>
+          <div class="asymmetry-note">
+            <span class="marker">⚠</span>
+            <span>Item 2.7 (re-entry support): design inference, single source (Bhatti). A3 rationale treats honestly.</span>
+          </div>
+        </div>
+
+        <div class="dp" data-id="dp3">
+          <div class="id">DP3 · Scaffolding</div>
+          <div class="title">Scaffolded orientation before open navigation</div>
+          <div class="gist">Confidence-building activities, goal articulation, deliberate transition from guided to independent — before the catalogue opens.</div>
+          <div class="strength">
+            <span class="strength-label">Evidence</span>
+            <span class="strength-value">Adequate · no longer thinnest on sources</span>
+            <span class="strength-bar" title="Tier composition of supporting evidence">
+              <span class="seg t1"></span><span class="seg t2"></span><span class="seg t2"></span><span class="seg t2"></span><span class="seg t3"></span><span class="seg t3"></span><span class="seg t4"></span>
+            </span>
+          </div>
+          <div class="asymmetry-note">
+            <span class="marker">⚠</span>
+            <span>Evidence-type asymmetry eased (heutagogy batch adds Moore, Narayan, Friedman, Martin &amp; Evans) but no direct quantitative outcome for the scaffolded-orientation intervention remains. Item 3.7 (guidance preference): design inference.</span>
+          </div>
+          <div class="rationale-flag">
+            <span class="marker">⚠</span>
+            <span>Conversation 10 (rationale-level): the axis/scaffolding choices sit in a thinly-evidenced corner the field itself flags (Agonács, Moore) — a gap-justification, not a per-feature warrant.</span>
+          </div>
+        </div>
+
+        <div class="dp" data-id="dp4">
+          <div class="id">DP4 · Agency</div>
+          <div class="title">Learner agency through reflective self-location</div>
+          <div class="gist">Learners as active authors: goal articulation, confidence and constraint checks, guided pathway design with revision, progressive disclosure, return-clearer.</div>
+          <div class="strength">
+            <span class="strength-label">Evidence</span>
+            <span class="strength-value">Strong</span>
+            <span class="strength-bar" title="Tier composition of supporting evidence">
+              <span class="seg t1"></span><span class="seg t1"></span><span class="seg t2"></span><span class="seg t2"></span><span class="seg t3"></span><span class="seg t3"></span>
+            </span>
+          </div>
+          <div class="asymmetry-note">
+            <span class="marker">⚠</span>
+            <span>Item 4.10 (AI as scaffold): scope-bounded gap, HIGH post-A3. Skulmowski sharpens it (digital ECL cost–benefit); Castro-Alonso's agent-locus prediction feeds it.</span>
+          </div>
+          <div class="rationale-flag">
+            <span class="marker">⚠</span>
+            <span>Conversation 10 (rationale-level): the spiral / return-clearer / capability-over-completion choices share the heutagogy field-evidence gap (honest-warrant framing).</span>
+          </div>
+          <div class="asymmetry-note">
+            <span class="marker">⚠</span>
+            <span>Conversation 11 · temporal register (the temporal-register chooser): a small act of temporal agency, not a structural fix — flexibility ≠ temporal autonomy (Shahjahan &amp; Bano). Triangulated by three independent voices at the collective level; the chooser sits at the individual level. Honest A3 limitations note.</span>
+          </div>
+          <div class="rationale-flag">
+            <span class="marker">⚠</span>
+            <span>Conversation 11 (rationale-level): the register's rhythm grain rests on one authoritative programme (Alhadeff-Jones); independence comes from two applied voices, not the rhythm theory itself. §7.1: design-led, evidence-convergent (Design inference · Cross-cutting convergence).</span>
+          </div>
+        </div>
+      </div>
+
+      <svg class="links" id="links" aria-hidden="true"></svg>
+    </div>
+  </div>
+
+  <div class="caption">
+    <div>
+      <div class="h">How to read it</div>
+      Fifty-nine papers in four layers. The function-graded <strong>definitional canopy</strong> (top) supplies constructs (Conklin, Knowles, Sweller, Kalyuga 2003, the Hase &amp; Kenyon heutagogy trio, Argyris), frameworks (Arthur &amp; Passini, Raubal &amp; Egenhofer, Blaschke, Glassner &amp; Back Ch6), context (Samuel) and method (van den Akker, Narayan) — <strong>function badges, not tier dots</strong>; faint dotted lines drop into the DPs each anchors. <strong>Gap-framing papers</strong> (left) name the argumentative space the DP arc fills; Agonács adds a rationale-level heutagogy-evidence gap. <strong>Readings</strong> cluster by source literature — eight clusters now: the <strong>Cognitive load (CLT)</strong> group in its own colour, Assessment &amp; feedback (Carless), a new <strong>Temporal / social-time</strong> canopy group (most of the stream is beyond A3 scope; only the register's warrant is lit), and Heutagogy split from SDL (toggle). Tier dots and badges encode standing; edge weight encodes how directly each link is licensed: mechanistic (the DP2 core — Miller, Krieglstein, Amadieu), defensible (empirical in design-relevant contexts), interpretive (Kim's macro-warrant; the construct canopy), consistent-with (reviews, the heutagogy convergent set, course readings).
+    </div>
+    <div>
+      <div class="h">What it surfaces</div>
+      <div id="surfaces-panel"></div>
+    </div>
+    <div>
+      <div class="h">Sources &amp; caveats</div>
+      Tier scheme: T1 flagship → T4 limited, anchored on field-relative IF and venue type. The scheme grades <em>journal standing, not study quality</em> — Bhatti (T4, real conceptual load) and DeStefano (T1 venue, review) show the two are not equivalent. Definitional papers are graded by <em>architectural function</em>, not tier. The Hase &amp; Kenyon heutagogy trio renders as one grouped unit with a cite-divide (Ch1 = how enacted; Ch2 = why + axis theory + continuum caveat; 2001 = axis origin) to avoid triple-counting; the <strong>Alhadeff-Jones</strong> cluster likewise renders as one grouped node with a cite-divide (2017 monograph = citation of record; the 2019/2020/2023/2010 facets = specific-point cites), carrying the single-scholar caveat. <strong>Sorokin &amp; Merton</strong> is the highest-cited node (~1,409 GS) yet the most out-of-scope (1937 macro-sociology) — tier ≠ load. <strong>Shahjahan &amp; Bano</strong>'s weight rests on in-context relevance (Adult Learning; WoS ESCI, no JCR JIF), not impact factor. Two cells are open KM decisions — <strong>Agonács tier</strong> and <strong>Glassner &amp; Back Ch5 §7.1</strong> — rendered with current values and flagged (⚑). Citations: Google Scholar, May 2026. Conversations are labelled exchanges from the synthesis, not new edges. <strong>Tay, Schwarz and Goldstein are reserve — excluded as nodes.</strong>
+    </div>
+  </div>
+
+  <div class="footnote">Kali Madden · EDGI902 · A3 · Evidence architecture · v6 · 6 June 2026 · interactive companion · shared build to fork point</div>
+
+</div>
+
+<script>
+/* ============================================================
+   v5 DATA LAYER — schema-seed §4.1 model
+   Compiled from Synthesis v3 §1–7 + the set-A master table.
+   ============================================================ */
+
+/* ---------- Canopy (function-graded; no tier dots) ---------- */
+const canopyGroups = [
+  { label:"Construct origins", cards:[
+    { id:"conklin",     ref:"Conklin",            yr:"1987", role:"Disorientation · cognitive overhead", fn:"construct" },
+    { id:"knowles",     ref:"Knowles",            yr:"1975", role:"SDL · 5-component process", fn:"construct" },
+    { id:"sweller",     ref:"Sweller et al.",     yr:"2019", role:"Cognitive load · current model", fn:"construct", cluster:"clt" },
+    { id:"kalyuga2003", ref:"Kalyuga et al.",     yr:"2003", role:"Expertise reversal", fn:"construct", cluster:"clt" },
+    { id:"hktrio",      trio:true, countAs:1, ref:"Hase &amp; Kenyon", role:"Heutagogy · axis", fn:"construct", cluster:"het",
+      members:[
+        ["2001","axis origin"],
+        ["Ch1 2013","operational — 7 elements (how enacted)"],
+        ["Ch2 2013","theory + PAH-continuum critique (why)"]
+      ], tension:{ label:"⚠ tension", title:"\u201cCompass, not a map.\u201d", body:"HK 2013 Ch2's PAH-continuum critique complicates a naive axis reading but <strong>strengthens designed-not-granted</strong>: the orientation map serves <em>now</em>; the built outcome is the learner's compass-capacity <em>later</em>." } },
+    { id:"argyris",     ref:"Argyris",            yr:"2002", role:"Double-loop · theory-of-action", fn:"construct", cluster:"org",
+      flagCell:"Argyris held A3-supporting (lightweight) per KM C6 override; double-loop platform role → beyond A3 scope. §7.1: single source + design inference + scope-bounded gap." }
+  ]},
+  { label:"Analytical frameworks", cards:[
+    { id:"arthur",       ref:"Arthur &amp; Passini",   yr:"1992", role:"Wayfinding · legibility", fn:"framework" },
+    { id:"raubal",       ref:"Raubal &amp; Egenhofer", yr:"1998", role:"Choice–clue model", fn:"framework" },
+    { id:"blaschke",     ref:"Blaschke",          yr:"2012", role:"PAH / axis field-hub", fn:"framework", cluster:"het" },
+    { id:"glassnerback6",ref:"Glassner &amp; Back Ch6",yr:"2020", role:"Serres wayfinding (philosophical)", fn:"framework", cluster:"het" }
+  ]},
+  { label:"Design context", single:true, cards:[
+    { id:"samuel", ref:"Samuel", yr:"2021", role:"Onboarding · 5-activity model", fn:"context" }
+  ]},
+  { label:"Methodological anchor", single:true, cards:[
+    { id:"vda",     ref:"van den Akker", yr:"1999", role:"Heuristic DP format", fn:"method" },
+    { id:"narayan", ref:"Narayan et al.", yr:"2019", role:"DBR · also DP3 empirical", fn:"method", cluster:"het" }
+  ]},
+  { label:"Temporal / social-time", single:true, horizon:true, cards:[
+    { id:"aj", trio:true, ref:"Alhadeff-Jones", role:"Rhythm / idiorhythmy · register grain", fn:"construct", cluster:"tmp", countAs:1,
+      members:[
+        ["2017","monograph · citation of record"],
+        ["2019","proportional-time → Conversation 8 · syncope → Conversation 9"],
+        ["2010/20/23","facets · rhythm, pathways, TL phases"]
+      ],
+      note:"Single-scholar core — four facets are one authoritative programme, not four converging sources." },
+    { id:"pb", ref:"Pschetz &amp; Bastian", yr:"2018", role:"Temporal design · the Family Clock", fn:"framework", cluster:"tmp",
+      note:"Independent applied voice 1 (Design Studies, Q1) — the Family Clock is a near-direct analogue of the register chooser." },
+    { id:"sb", ref:"Shahjahan &amp; Bano", yr:"2025", role:"Decolonial HE temporality · in-population", fn:"context", cluster:"tmp",
+      note:"Independent applied voice 2, closest-to-context (Adult Learning, SAGE/AAACE; WoS ESCI, Scopus SJR ≈ 0.412). \u201cOnline is still governed by clock time; flexibility ≠ temporal autonomy.\u201d Weight rests on in-context relevance, not impact factor." },
+    { id:"sorokin", ref:"Sorokin &amp; Merton", yr:"1937", role:"Root · time is socially produced, qualitative, ownable", fn:"construct", cluster:"tmp", horizon:true,
+      tension:{ title:"Highest-cited, most out-of-scope.", body:"~1,409 GS \u2014 the highest in the entire set \u2014 yet 1937 macro-sociology: <strong>tier \u2260 load.</strong> It grounds the register's premise (time is socially produced and ownable) but is foundational, not load-bearing for A3." } }
+  ]}
+];
+
+/* ---------- Gap framing ---------- */
+const gapCards = [
+  { id:"arshad", ref:"Arshad et al.", yr:"2016", gist:"LMS navigation recognised as a problem but not theorised through wayfinding.", targets:"opens space → DP1 · DP2" },
+  { id:"perez",  ref:"Pérez-Álvarez", yr:"2022", gist:"Navigation is the most prevalent SRL tool function but the navigation–SRL relationship is \u201crarely described\u201d.", targets:"opens space → DP3 · DP4 · whole arc" },
+  { id:"agonacs",ref:"Agonács &amp; Matos", yr:"2019", gist:"The heutagogy field's own systematic self-assessment: capability &amp; non-linearity underrepresented; no readiness instrument.", targets:"rationale-level → DP3 · DP4", rationale:true,
+    flagCell:"Open KM cell — tier set T3 on venue (Open Learning, T&amp;F, no JIF); verify the JCR/venue figure if a T2 claim is wanted." }
+];
+
+/* ---------- Source-literature clusters ---------- */
+const clusterDefs = [
+  { id:"hci", label:"HCI wayfinding" },
+  { id:"hyp", label:"Hypertext disorientation" },
+  { id:"clt", label:"Cognitive load (CLT)", isNew:true },
+  { id:"sdl", label:"Self-directed learning" },
+  { id:"het", label:"Heutagogy &amp; the andragogy→heutagogy axis" },
+  { id:"cr",  label:"Course readings (A3-active)" },
+  { id:"af",  label:"Assessment &amp; feedback", isNew:true }
+];
+
+/* ---------- Reading nodes ---------- */
+const readings = [
+  /* HCI */
+  { id:"gullikson", lit:"hci", ref:"Gullikson et al.", yr:"1999", tier:3, tierTitle:"T3 · Specialist · The Electronic Library",
+    method:"Usability test", cites:"124 cites", stat:"62% task success · bimodal 41.6s vs 118.7s, <em>p</em>&lt;.004" },
+  { id:"miller", lit:"hci", ref:"Miller &amp; Remington", yr:"2004", tier:2, bridging:true, tierTitle:"T2 · Strong · Human–Computer Interaction (pre-2005, top-tier HCI)",
+    method:"Computational model", cites:"~200 cites", extraBadge:"bridging · causal chain",
+    stat:"Label quality = 58% var · MESA <em>r</em>=.841 · backtracking-cost mech." },
+
+  /* Hypertext */
+  { id:"webster", lit:"hyp", ref:"Webster &amp; Ahuja", yr:"2006", tier:1, tierTitle:"T1 · Flagship · MIS Quarterly",
+    method:"Experimental + SEM", cites:"278 cites",
+    stat:"Disorient. → engagement β=−.50 · → intentions β=−.27 · n=207",
+    tension:{ title:"The pilot-study paradox.", body:"A guideline-compliant navigation condition <em>increased</em> disorientation when elements were not persistently visible. Converges with Bhatti's modal paradox (Conversation 2): signposting must be embedded in persistent structure, not delivered as interruptions." } },
+  { id:"amadieu", lit:"hyp", ref:"Amadieu et al.", yr:"2009", tier:2, tierTitle:"T2 · Strong · Learning &amp; Instruction (IF 4.9; n=24) · A3 re-extraction",
+    method:"Experimental", cites:"240 cites", extraBadge:"A3 re-extraction",
+    stat:"LPK disorient. M=3.00 vs 5.87, <em>p</em>=.005 · n=24 · mechanistic (PK-moderated)",
+    tension:{ title:"Partial expertise reversal.", body:"HPK learners gained more <em>factual</em> knowledge from hierarchical structure (<em>p</em>=.015), against prediction. Productive: supports a universal — not novice-only — onboarding stance." } },
+  { id:"bhatti", lit:"hyp", ref:"Bhatti et al.", yr:"2020", tier:4, tierTitle:"T4 · Limited · ICCSE proceedings",
+    method:"Mixed methods", cites:"1 cite",
+    stat:"85% reported disorient. · navigational vs mental distinction",
+    subnote:"Conceptual contribution only — load carried by Webster &amp; Amadieu. The canonical \u201ctier ≠ quality\u201d case.",
+    tension:{ title:"The intervention itself disoriented.", body:"38% found the adaptive feedback modal distracting. Productive: signposting must be embedded in structure, not delivered as interruptive overlays (constraint on DP2 implementation)." } },
+  { id:"krieglstein", lit:"hyp", ref:"Krieglstein et al.", yr:"2022", tier:2, tierTitle:"T2 · Strong · ETR&amp;D (IF 4.2; n=122) · A3 re-extraction",
+    method:"Experimental", cites:"30 cites", extraBadge:"A3 re-extraction · causal chain",
+    stat:"Salience→disorient β=−.53 · disorient→ECL β=.80 · ηp²=.07 · learning/CL null",
+    tension:{ title:"Efficiency paradox + performance/CL nulls.", body:"Low-salience learners were paradoxically more efficient (<em>p</em>=.042, small). Likely a ceiling effect in a learner-paced lab. The DP4 value is the <strong>mediation mechanism</strong>, not direct performance." } },
+
+  /* Cognitive load (CLT) */
+  { id:"mayer", lit:"clt", ref:"Mayer", yr:"2017", tier:2, tierTitle:"T2 · JCAL (IF 4.6)",
+    method:"Effect-size synthesis", cites:"multimedia",
+    stat:"coherence d=.70 · signalling d=.46 · redundancy d=.87 · contiguity d=.79–1.30" },
+  { id:"destefano", lit:"clt", ref:"DeStefano &amp; LeFevre", yr:"2007", tier:1, tierTitle:"T1 · CHB (IF 8.9) — review; tier grades venue, not role",
+    method:"Review", cites:"CHB IF 8.9", extraBadge:"T1-on-venue (by design)",
+    stat:"CLT → navigation bridge · cognitive overhead in hypertext",
+    subnote:"T1 on venue although a review — deliberate: the review-ness is carried by the consistent-with edge weight, not a tier penalty." },
+  { id:"tetzlaff", lit:"clt", ref:"Tetzlaff et al.", yr:"2025", tier:2, tierTitle:"T2 · Learning &amp; Instruction (IF 6.2; 60 studies)",
+    method:"Meta-analysis", cites:"60 studies",
+    stat:"low-PK d=.505 · high-PK d=−.428 · interaction d=.971 [.631, 1.312]" },
+  { id:"kalyuga2007", lit:"clt", ref:"Kalyuga", yr:"2007", tier:2, tierTitle:"T2 · EPR (IF 8.8)",
+    method:"Narrative review", cites:"~25 studies",
+    stat:"d=0.45–2.99 (mid 1.72) · expertise reversal → adaptive fading" },
+  { id:"castroalonso", lit:"clt", ref:"Castro-Alonso et al.", yr:"2021", tier:2, tierTitle:"T2 · EPR (IF 8.8)",
+    method:"Narrative review", cites:"5 strategies",
+    stat:"contiguity d=.72 · segmenting d=.35–.42 · learner-managed load · agent prediction untested",
+    subnote:"§7.1: design-inference on the DP4 agent-locus edge (untested prediction) — feeds 4.10." },
+  { id:"schneider", lit:"clt", ref:"Schneider et al.", yr:"2021", tier:2, tierTitle:"T2 · C&amp;E Open (IF 5.7)",
+    method:"Experimental", cites:"signalling",
+    stat:"signalling ECL ηp²=.08/.15 · learning ηp²=.22/.06 · stacking adds nothing",
+    tension:{ title:"\u201cFocused more is more\u201d — stacking is redundant.", body:"Stacking signposting adds nothing. The DP2 warrant is <strong>conditional</strong>: signpost <em>related</em> elements, not \u201cadd more signposts\u201d." } },
+  { id:"liu", lit:"clt", ref:"Liu et al.", yr:"2019", tier:3, tierTitle:"T3 · Book chapter (no JIF) — primary RCT",
+    method:"RCT", cites:"N=70",
+    stat:"cued vs un-cued: comprehension d=1.06 · transfer d=.63 · retention d=.45" },
+  { id:"skulmowski", lit:"clt", ref:"Skulmowski &amp; Xu", yr:"2021", tier:2, tierTitle:"T2 · EPR (IF 8.8) — non-empirical, capped",
+    method:"Review / perspective", cites:"digital ECL",
+    stat:"non-empirical · digital ECL cost–benefit · cognitive-load alignment",
+    tension:{ title:"\u201cNot all extraneous load is harmful.\u201d", body:"Sits against DP1's plain \u201creduce load.\u201d Resolved by justifying each load-adding feature by its germane process (cognitive-load alignment)." } },
+  { id:"martinevans", lit:"clt", ref:"Martin &amp; Evans Ch2", yr:"2019", tier:2, tierTitle:"T2 · Book chapter; LRIS journal TTE (IF 3.9)",
+    method:"Framework + validation", cites:"LRIS",
+    stat:"LRIS: 25 items · 5 factors · N=393 · ω .92–.94 · LRI − to ECL, + to motivation/achievement" },
+
+  /* SDL */
+  { id:"canning", lit:"sdl", ref:"Canning", yr:"2010", tier:3, tierTitle:"T3 · J. Further &amp; Higher Ed",
+    method:"Qualitative", cites:"~17 cites",
+    stat:"Confidence = primary barrier · pedagogy↔heutagogy oscillation · n=25" },
+  { id:"kim", lit:"sdl", ref:"Kim et al.", yr:"2021", tier:1, tierTitle:"T1 · Flagship · Computers &amp; Education",
+    method:"SEM", cites:"107 cites", extraBadge:"macro-warrant",
+    stat:"Structure → SDL β=.471 · SDL → further learning β=.782 · full mediation · n=664 · commitment β=.013 n.s." },
+  { id:"burin", lit:"sdl", ref:"Burin et al.", yr:"2020", tier:2, bridging:true, tierTitle:"T2 · Strong · Metacognition and Learning",
+    method:"Quasi-experimental", cites:"37 cites", extraBadge:"bridging · causal chain",
+    stat:"Metacognitive monitoring OR=1.71, <em>p</em>=.0008 · WM n.s." },
+  { id:"zahrawati", lit:"sdl", ref:"Zahrawati &amp; Rukiyati", yr:"2026", tier:4, tierTitle:"T4 · Bestari (no JIF, not Scopus) — adjacent scaffolding sub-cluster",
+    method:"PRISMA SLR", cites:"120→31",
+    stat:"5 scaffolding mechanisms → autonomy indicators",
+    subnote:"Scaffolding / learner-autonomy (pragmatic education) — adjacent sub-cluster candidate, kept out of the heutagogy bank." },
+
+  /* Heutagogy */
+  { id:"lock", lit:"het", ref:"Lock et al.", yr:"2021", tier:2, tierTitle:"T2 source / T1 relevance · BJET (IF 8.1; n=7 experts) · A3 re-extraction",
+    method:"SLR + Delphi", cites:"BJET", extraBadge:"A3 re-extraction · DNG anchor",
+    stat:"heutagogy \u201cconsciously designed … supported\u201d (p.1660) · designed-not-granted",
+    subnote:"Mixed directness: Direct on the designed-not-granted prescription; consistent-with on the specific LaA instruments." },
+  { id:"moore", lit:"het", ref:"Moore", yr:"2020", tier:2, tierTitle:"T2 · Distance Education (IF 3.0; Q1 SSCI)",
+    method:"Critical SLR", cites:"33 studies",
+    stat:"33 articles (funnel 159→33) · PAH-in-LMS · no effect sizes" },
+  { id:"addanki", lit:"het", ref:"Addanki et al.", yr:"2022", tier:4, tierTitle:"T4 · ACE conference (no JIF; N=6)",
+    method:"Empirical (PAH)", cites:"N=6",
+    stat:"190 PAH refs → P45/A39/H16% · non-linear regression under difficulty · PAH ⊥ grade" },
+  { id:"friedman", lit:"het", ref:"Friedman &amp; Nash-Luckenbach", yr:"2023", tier:3, tierTitle:"T3 · Higher Education (IF 4.6; N=10)",
+    method:"Conceptual + qual.", cites:"N=10",
+    stat:"grounded theory · 5-principle \u201cheutagogical bridge\u201d · neurodiversity-affirming" },
+  { id:"canningcallan", lit:"het", ref:"Canning &amp; Callan", yr:"2010", tier:3, tierTitle:"T2–T3 source / T1 relevance · Reflective Practice (IF 1.8)",
+    method:"Conceptual (spiral)", cites:"spiral",
+    stat:"\u201cnot a circle that closes but a spiral of expanding knowledge\u201d (p.80)" },
+  { id:"glassnerback5", lit:"het", ref:"Glassner &amp; Back Ch5", yr:"2020", tier:2, tierTitle:"T2 (droppable) · book — critical-conceptual",
+    method:"Critical-conceptual", cites:"book",
+    stat:"capability ≠ competency · self-determined = non-linear · andragogy step not required",
+    flagCell:"Open KM cell — §7.1 directness/confidence shown provisional (likely cross-cutting / design-inference); confirm at set B." },
+
+  /* Course readings */
+  { id:"bennett", lit:"cr", ref:"Bennett et al.", yr:"2017", tier:2, tierTitle:"T2 · Strong · ETR&amp;D",
+    method:"Empirical (mixed)", cites:"~330 cites", extraBadge:"Tier 1 must-cite",
+    stat:"Design extends beyond planning · most teachers design without formal frameworks" },
+  { id:"lockyer", lit:"cr", ref:"Lockyer et al.", yr:"2025", tier:2, tierTitle:"T2 · Strong · Springer chapter",
+    method:"Empirical (qual.)", cites:"new (2025)", extraBadge:"Tier 1 must-cite",
+    stat:"Expert teacher design thinking · systemic vision · designing-while-teaching · Table 6.7" },
+  { id:"apps", lit:"cr", ref:"Apps et al.", yr:"2019", tier:3, tierTitle:"T3 · Specialist · AJET",
+    method:"Quasi-experimental", cites:"~40 cites", extraBadge:"Tier 3 optional",
+    stat:"Task-form unfamiliarity as distinct challenge · designed-in scaffolds" },
+  { id:"bowerch11", lit:"cr", ref:"Bower 2017 Ch 11", yr:"", tier:2, tierTitle:"T2 · Strong · Emerald textbook",
+    method:"Design principles", cites:"textbook", extraBadge:"Tier 3 optional",
+    stat:"20 TEL design principles · Table 11.3 · Principles 2, 7, 8, 9, 10 map to A3" },
+
+  /* Assessment & feedback */
+  { id:"carless", lit:"af", ref:"Carless", yr:"2018", tier:3, tierTitle:"T3 · A&amp;EHE (IF 3.8; n=4 longitudinal qual.)",
+    method:"Conceptual / longitudinal", cites:"n=4",
+    stat:"loop→spiral reframing · feedback literacy · capability across passes",
+    subnote:"Year-of-record: slug 2018 / VoR 2019, 44(5), 705–714 (citation-bank flag)." }
+];
+
+/* ============================================================
+   ⑥ FORK POINT — theme overlays (the only place the variants differ)
+   themeMode 'rich' (6 bands, v3 §11.4) | 'lean' (4 bands broadened, v3-lean §D)
+   Each mode supplies its theme cards AND its reading→theme + theme→DP edges.
+   Everything else (canopy, gap, clusters, conversations, chain, ⚠) is shared.
+   ============================================================ */
+const themeDefs = {
+  rich: [
+    { id:"t1", num:"Theme 01", title:"Structure determines navigation success — not visual design.",
+      gloss:"Information architecture, label quality, and persistent visibility form an interconnected system. Aesthetics cannot rescue an illegible structure." },
+    { id:"t2", num:"Theme 02", title:"Disorientation is the central, multi-dimensional mechanism.",
+      gloss:"Thickened: Krieglstein gives it the salience→disorientation→ECL mechanism; DeStefano / Amadieu supply the hypertext-load account." },
+    { id:"t3", num:"Theme 03", title:"Self-directed learning needs scaffolded transition, not assumed readiness.",
+      gloss:"Now the heutagogy hub: Lock (designed-not-granted), Narayan (DBR scaffold-into-role), Martin &amp; Evans (gradual release), the HK trio (axis), Moore." },
+    { id:"t4", num:"Theme 04", title:"Metacognitive self-regulation is the learner-side mechanism.",
+      gloss:"Learners use structural cues as metacognitive tools (Burin) and self-manage load (Castro-Alonso). Salience and signposting are prerequisites for self-regulation." },
+    { id:"t5", num:"Theme 05", isNew:true, title:"Support must adjust to expertise — and not all load is harmful.",
+      gloss:"The expertise-reversal cluster (Kalyuga, Tetzlaff, Amadieu, Schneider, Mayer, DeStefano, Castro-Alonso) converges: optimal support is a function of the learner's current state, so guidance fades / adjusts; and load serving a germane process is justified (Skulmowski). Justifies the adjustable guidance-preference selector (DP4) and the spiral fade (DP2→DP3). Cross-cuts Conversation 11 (the learner-owned temporal register): the temporal-preference selector is a sibling DP4 selector — agency over the journey's relationship to time — also corroborating DP3 (flexible-but-structured)." },
+    { id:"t6", num:"Theme 06", isNew:true, title:"Capability is designed-for and developed across passes — not granted, assumed, or completed.",
+      gloss:"The axis / spiral / capacity cluster (HK trio, Canning &amp; Callan, Carless, Lock, Glassner &amp; Back Ch5, Blaschke, Kim's null-commitment) converges: the unit of value is carried-forward capability, reached non-linearly across reflective passes. Justifies the spiral / return-clearer (DP4) and the designed-not-granted rationale. Carries capability ≠ competency + the Conversation 10 honest-warrant." }
+  ],
+  lean: [
+    { id:"t1", num:"Theme 01", title:"Structure determines navigation success — not visual design.",
+      gloss:"Information architecture, label quality, and persistent visibility form an interconnected system. Aesthetics cannot rescue an illegible structure." },
+    { id:"t2", num:"Theme 02", title:"Disorientation is the central, multi-dimensional mechanism.",
+      gloss:"Broadened to carry the CLT load account: navigational confusion, attentional drift and extraneous cognitive load co-occur. Krieglstein supplies the salience→disorientation→ECL mechanism; DeStefano / Amadieu / Sweller / Mayer the load layer." },
+    { id:"t3", num:"Theme 03", title:"Self-directed learning needs scaffolded transition — designed-for, not assumed, and developed across passes.",
+      gloss:"The heutagogy + developmental hub: designed-not-granted (Lock, Narayan), the non-linear axis (HK trio, Blaschke, Addanki, Friedman, Moore), capability across passes (Canning &amp; Callan, Carless, Glassner &amp; Back Ch5, Kim's null-commitment), and support that fades / adjusts as expertise grows (the expertise-reversal set). Cross-cuts the learner-owned temporal register (Conversation 11): the temporal-preference selector lands the same DP4 agency (+ DP3 flexible-but-structured) — a small act of temporal agency, not a structural fix." },
+    { id:"t4", num:"Theme 04", title:"Metacognitive self-regulation is the learner-side mechanism.",
+      gloss:"Broadened: learners use structural cues as metacognitive tools (Burin) and self-manage load (Castro-Alonso). Salience and signposting are prerequisites for self-regulation." }
+  ]
+};
+
+/* Reading→theme + theme→DP edges per mode. kind = directness (edge weight). */
+const themeLinks = {
+  rich: [
+    /* readings → themes */
+    { from:"gullikson", to:"t1", kind:"directly-defensible" },
+    { from:"miller",    to:"t1", kind:"mechanistic" },
+    { from:"webster",   to:"t1", kind:"consistent-with" },
+    { from:"webster",   to:"t2", kind:"directly-defensible" },
+    { from:"amadieu",   to:"t2", kind:"mechanistic" },
+    { from:"amadieu",   to:"t5", kind:"directly-defensible" },
+    { from:"bhatti",    to:"t2", kind:"consistent-with" },
+    { from:"krieglstein", to:"t2", kind:"mechanistic" },
+    { from:"krieglstein", to:"t4", kind:"directly-defensible" },
+    { from:"mayer",        to:"t2", kind:"consistent-with" },
+    { from:"mayer",        to:"t5", kind:"consistent-with" },
+    { from:"destefano",    to:"t2", kind:"consistent-with" },
+    { from:"destefano",    to:"t5", kind:"consistent-with" },
+    { from:"tetzlaff",     to:"t5", kind:"consistent-with" },
+    { from:"kalyuga2007",  to:"t5", kind:"consistent-with" },
+    { from:"castroalonso", to:"t4", kind:"consistent-with" },
+    { from:"castroalonso", to:"t5", kind:"consistent-with" },
+    { from:"schneider",    to:"t5", kind:"defensible" },
+    { from:"liu",          to:"t2", kind:"defensible" },
+    { from:"skulmowski",   to:"t5", kind:"consistent-with" },
+    { from:"martinevans",  to:"t3", kind:"consistent-with" },
+    { from:"canning", to:"t3", kind:"directly-defensible" },
+    { from:"kim", to:"t1", kind:"interpretive" },
+    { from:"kim", to:"t2", kind:"interpretive" },
+    { from:"kim", to:"t3", kind:"interpretive" },
+    { from:"kim", to:"t4", kind:"interpretive" },
+    { from:"kim", to:"t6", kind:"interpretive" },
+    { from:"burin", to:"t4", kind:"consistent-with" },
+    { from:"zahrawati", to:"t3", kind:"consistent-with" },
+    { from:"lock", to:"t3", kind:"directly-defensible" },
+    { from:"lock", to:"t6", kind:"consistent-with" },
+    { from:"moore", to:"t3", kind:"consistent-with" },
+    { from:"addanki", to:"t3", kind:"consistent-with" },
+    { from:"friedman", to:"t3", kind:"consistent-with" },
+    { from:"canningcallan", to:"t6", kind:"consistent-with" },
+    { from:"glassnerback5", to:"t6", kind:"consistent-with" },
+    { from:"bennett", to:"t3", kind:"consistent-with" },
+    { from:"lockyer", to:"t3", kind:"consistent-with" },
+    { from:"apps", to:"t3", kind:"directly-defensible" },
+    { from:"bowerch11", to:"t1", kind:"consistent-with" },
+    { from:"bowerch11", to:"t2", kind:"consistent-with" },
+    { from:"bowerch11", to:"t3", kind:"consistent-with" },
+    { from:"bowerch11", to:"t4", kind:"consistent-with" },
+    { from:"carless", to:"t6", kind:"consistent-with" },
+    /* themes → DPs */
+    { from:"t1", to:"dp1", kind:"primary" },
+    { from:"t1", to:"dp2", kind:"supporting" },
+    { from:"t2", to:"dp2", kind:"primary" },
+    { from:"t2", to:"dp4", kind:"supporting" },
+    { from:"t3", to:"dp3", kind:"primary" },
+    { from:"t3", to:"dp4", kind:"supporting" },
+    { from:"t4", to:"dp4", kind:"primary" },
+    { from:"t4", to:"dp1", kind:"supporting" },
+    { from:"t5", to:"dp4", kind:"primary" },
+    { from:"t5", to:"dp2", kind:"supporting" },
+    { from:"t5", to:"dp3", kind:"supporting" },
+    { from:"t6", to:"dp4", kind:"primary" },
+    { from:"t6", to:"dp3", kind:"supporting" }
+  ],
+  lean: [
+    { from:"gullikson", to:"t1", kind:"directly-defensible" },
+    { from:"miller",    to:"t1", kind:"mechanistic" },
+    { from:"webster",     to:"t1", kind:"consistent-with" },
+    { from:"webster",     to:"t2", kind:"directly-defensible" },
+    { from:"amadieu",     to:"t2", kind:"mechanistic" },
+    { from:"amadieu",     to:"t4", kind:"defensible" },
+    { from:"bhatti",      to:"t2", kind:"consistent-with" },
+    { from:"krieglstein", to:"t2", kind:"mechanistic" },
+    { from:"krieglstein", to:"t4", kind:"directly-defensible" },
+    { from:"mayer",        to:"t1", kind:"consistent-with" },
+    { from:"mayer",        to:"t2", kind:"consistent-with" },
+    { from:"destefano",    to:"t1", kind:"consistent-with" },
+    { from:"destefano",    to:"t2", kind:"consistent-with" },
+    { from:"tetzlaff",     to:"t2", kind:"consistent-with" },
+    { from:"kalyuga2007",  to:"t2", kind:"consistent-with" },
+    { from:"castroalonso", to:"t2", kind:"consistent-with" },
+    { from:"castroalonso", to:"t4", kind:"consistent-with" },
+    { from:"schneider",    to:"t2", kind:"defensible" },
+    { from:"liu",          to:"t2", kind:"defensible" },
+    { from:"skulmowski",   to:"t2", kind:"consistent-with" },
+    { from:"martinevans",  to:"t3", kind:"consistent-with" },
+    { from:"canning", to:"t3", kind:"directly-defensible" },
+    { from:"kim",     to:"t1", kind:"interpretive" },
+    { from:"kim",     to:"t2", kind:"interpretive" },
+    { from:"kim",     to:"t3", kind:"interpretive" },
+    { from:"kim",     to:"t4", kind:"interpretive" },
+    { from:"burin",   to:"t2", kind:"consistent-with" },
+    { from:"burin",   to:"t4", kind:"consistent-with" },
+    { from:"zahrawati", to:"t3", kind:"consistent-with" },
+    { from:"lock",          to:"t3", kind:"directly-defensible" },
+    { from:"moore",         to:"t3", kind:"consistent-with" },
+    { from:"addanki",       to:"t3", kind:"consistent-with" },
+    { from:"friedman",      to:"t3", kind:"consistent-with" },
+    { from:"canningcallan", to:"t3", kind:"consistent-with" },
+    { from:"glassnerback5", to:"t3", kind:"consistent-with" },
+    { from:"bennett",   to:"t3", kind:"consistent-with" },
+    { from:"lockyer",   to:"t3", kind:"consistent-with" },
+    { from:"apps",      to:"t3", kind:"directly-defensible" },
+    { from:"bowerch11", to:"t1", kind:"consistent-with" },
+    { from:"bowerch11", to:"t2", kind:"consistent-with" },
+    { from:"bowerch11", to:"t3", kind:"consistent-with" },
+    { from:"bowerch11", to:"t4", kind:"consistent-with" },
+    { from:"carless", to:"t3", kind:"consistent-with" },
+    { from:"t1", to:"dp1", kind:"primary" },
+    { from:"t1", to:"dp2", kind:"supporting" },
+    { from:"t2", to:"dp2", kind:"primary" },
+    { from:"t2", to:"dp4", kind:"supporting" },
+    { from:"t3", to:"dp3", kind:"primary" },
+    { from:"t3", to:"dp4", kind:"supporting" },
+    { from:"t4", to:"dp4", kind:"primary" },
+    { from:"t4", to:"dp1", kind:"supporting" }
+  ]
+};
+
+/* the active edge set — set by setMode() at boot */
+let links = themeLinks.lean;
+
+/* ---------- Canopy → DP anchors (downward dotted) ---------- */
+const canopyLinks = [
+  { from:"conklin",      to:"dp2" },
+  { from:"knowles",      to:"dp3" },
+  { from:"arthur",       to:"dp1" },
+  { from:"raubal",       to:"dp2" },
+  { from:"samuel",       to:"dp3" },
+  { from:"vda",          to:"dp1" },
+  { from:"sweller",      to:"dp1" },
+  { from:"kalyuga2003",  to:"dp2" },
+  { from:"kalyuga2003",  to:"dp3" },
+  { from:"hktrio",       to:"dp3" },
+  { from:"hktrio",       to:"dp4" },
+  { from:"blaschke",     to:"dp3" },
+  { from:"blaschke",     to:"dp4" },
+  { from:"argyris",      to:"dp4" },
+  { from:"glassnerback6",to:"dp1" },
+  { from:"narayan",      to:"dp3" },
+  { from:"aj",           to:"dp4" },
+  { from:"aj",           to:"dp3" },
+  { from:"pb",           to:"dp4" },
+  { from:"sb",           to:"dp4" }
+];
+
+/* ---------- Gap → DP ---------- */
+const gapLinks = [
+  { from:"arshad", to:"dp1" },
+  { from:"arshad", to:"dp2" },
+  { from:"perez",  to:"dp3" },
+  { from:"perez",  to:"dp4" },
+  { from:"agonacs",to:"dp3", rationale:true },
+  { from:"agonacs",to:"dp4", rationale:true }
+];
+
+/* ---------- DP membership for the focus chips ---------- */
+const readingDPs = {
+  gullikson:["dp1"], miller:["dp1","dp2","dp4"], webster:["dp2","dp1"], amadieu:["dp2","dp1","dp4"],
+  bhatti:["dp2"], krieglstein:["dp2","dp4"],
+  mayer:["dp1","dp2"], destefano:["dp1","dp2"], tetzlaff:["dp2"], kalyuga2007:["dp2"],
+  castroalonso:["dp1","dp2","dp4"], schneider:["dp2"], liu:["dp2"], skulmowski:["dp1"], martinevans:["dp3","dp4"],
+  canning:["dp3"], kim:["dp1","dp2","dp3","dp4"], burin:["dp2","dp4"], zahrawati:["dp3"],
+  lock:["dp3"], moore:["dp3"], addanki:["dp3"], friedman:["dp3"], canningcallan:["dp4"], glassnerback5:["dp3","dp4"],
+  bennett:["dp3","dp4"], lockyer:["dp3","dp4"], apps:["dp3","dp4"], bowerch11:["dp1","dp2","dp3","dp4"], carless:["dp4"]
+};
+
+/* ---------- Conversations (consolidated set — v3 §5) ---------- */
+const conversations = {
+  c1: { name:"Conversation 1 · Structure-legibility chain", lineage:"v2 #1",
+    desc:"Gullikson identifies the phenomenon → Miller explains the mechanism → Amadieu shows the moderator (prior knowledge) → Krieglstein traces the downstream consequence (cognitive load). Progressive deepening, not four independent findings.",
+    nodes:["gullikson","miller","amadieu","krieglstein"], arcs:[["gullikson","miller"],["miller","amadieu"],["amadieu","krieglstein"]] },
+  c2: { name:"Conversation 2 · Disorientation–signposting paradox", lineage:"v2 #2",
+    desc:"Webster's pilot finding (guideline-compliant nav increased disorientation when not persistently visible) and Bhatti's modal paradox (the feedback modal itself became a distractor) converge on a single design constraint: signposting must be embedded in persistent structure, not delivered as interruption.",
+    nodes:["webster","bhatti"], arcs:[["webster","bhatti"]] },
+  c3: { name:"Conversation 3 · Expertise reversal", lineage:"Register C1 · densest",
+    desc:"Kalyuga 2003 names the effect → Amadieu is the instance → Kalyuga 2007 reviews it → Tetzlaff meta-analyses it; Skulmowski, DeStefano, Mayer, Castro-Alonso, Schneider and Martin & Evans converge. The set's densest exchange (9 members + the \u201creversal ⊂ element interactivity\u201d sub-finding).",
+    nodes:["kalyuga2003","amadieu","kalyuga2007","tetzlaff","skulmowski","destefano","mayer","castroalonso","schneider","martinevans"],
+    arcs:[["kalyuga2003","amadieu"],["amadieu","kalyuga2007"],["kalyuga2007","tetzlaff"],["tetzlaff","mayer"],["tetzlaff","castroalonso"],["tetzlaff","schneider"],["tetzlaff","skulmowski"]] },
+  c4: { name:"Conversation 4 · Signalling / cueing → DP2 integration", lineage:"Register C4",
+    desc:"Sweller's load theory → Mayer's signalling effect → Schneider / Krieglstein's salience experiments → Liu's classroom RCT confirmation. The signalling warrant for DP2's persistent cues, conditional on signposting related elements.",
+    nodes:["sweller","mayer","schneider","krieglstein","liu"], arcs:[["sweller","mayer"],["mayer","schneider"],["schneider","krieglstein"],["mayer","liu"]] },
+  c5: { name:"Conversation 5 · CLT ↔ learner-agency axis", lineage:"Register C2 · meta-convergence",
+    desc:"DeStefano, Mayer, Castro-Alonso and Kalyuga 2007 converge on the meta-claim that load management and learner agency are two ends of one axis — instructor-managed vs learner-managed load.",
+    nodes:["destefano","mayer","castroalonso","kalyuga2007"], arcs:[["destefano","mayer"],["mayer","castroalonso"],["castroalonso","kalyuga2007"]] },
+  c6: { name:"Conversation 6 · Disorientation ↔ wayfinding", lineage:"Register C3 · cross-construct",
+    desc:"A cross-construct bridge: Amadieu measures disorientation, DeStefano supplies the load mechanism, Glassner & Back Ch6 offers the generative wayfinding re-frame; Krieglstein is the hub linking salience to load.",
+    nodes:["amadieu","destefano","glassnerback6","krieglstein"], arcs:[["amadieu","destefano"],["destefano","glassnerback6"],["krieglstein","amadieu"]] },
+  c7: { name:"Conversation 7 · Andragogy→heutagogy axis: non-linear & designed-not-granted", lineage:"Register C5 (absorbs v2 #4)",
+    desc:"Lock (anchor, Direct) with the HK trio, Blaschke, Addanki, Friedman, Moore, Narayan and Martin & Evans (load-side): the axis is non-linear and capability is designed-not-granted. Bridges to Conversation 5.",
+    nodes:["lock","hktrio","blaschke","addanki","friedman","moore","narayan","martinevans"],
+    arcs:[["lock","hktrio"],["hktrio","blaschke"],["blaschke","addanki"],["addanki","friedman"],["friedman","moore"],["lock","narayan"],["narayan","martinevans"]] },
+  c8: { name:"Conversation 8 · Capacity-over-completion", lineage:"v2 #7 + Register C6 (merged) · +temporal",
+    desc:"Bennett (design beyond planning) + Lockyer (experts delay detail and \u201clet go\u201d) + Kim (commitment β=.013, n.s.; SDL capacity does predict) + Canning + Lock + Glassner & Back Ch5 + Carless. Effective onboarding builds self-directed capacity, not task completion. Two temporal voices join the same claim — Alhadeff-Jones (2019) (\u201clearning is not proportional to time invested\u201d) and Shahjahan & Bano (beyond GPA / time-to-degree toward persistence and growth).",
+    nodes:["bennett","lockyer","kim","canning","lock","glassnerback5","carless","aj","sb"],
+    arcs:[["bennett","lockyer"],["lockyer","kim"],["kim","canning"],["canning","lock"],["lock","glassnerback5"],["glassnerback5","carless"],["kim","aj"],["carless","sb"]] },
+  c9: { name:"Conversation 9 · Spiral / across-pass progression", lineage:"Register C7 · +temporal (faint)",
+    desc:"The spiral anchored in two independent literatures: Canning & Callan (heutagogy) ↔ Carless (feedback). \u201cNot a circle that closes but a spiral of expanding knowledge.\u201d Alhadeff-Jones (2019) syncope reads the renewing pause as a renewing interval, not a restart — vocabulary-reach, single-scholar (faint). The DP4 across-pass facet.",
+    nodes:["canningcallan","carless","aj"], arcs:[["canningcallan","carless"],["canningcallan","aj"]] },
+  c10:{ name:"Conversation 10 · Heutagogy's empirical-evidence gap", lineage:"Register C8 · rationale-level", rationale:true,
+    desc:"Moore + Agonács & Matos: the field's own systematic reviews flag that capability and non-linearity are under-evidenced. Rationale-level — never cited as evidence FOR a feature; it surfaces on the DP3/DP4 rationale as honest-warrant framing.",
+    nodes:["moore","agonacs","dp3","dp4"], arcs:[["moore","agonacs"]] },
+  c11:{ name:"Conversation 11 · Learner-owned temporal register", lineage:"Register C9 · NEW",
+    desc:"Time is plural, social and ownable — so a learner may set their own rhythm. One single-scholar programme (Alhadeff-Jones · rhythm/idiorhythmy) + two independent applied voices (Pschetz & Bastian’s Family Clock; Shahjahan & Bano, in adult online HE) over a documented root (Sorokin & Merton 1937). Design-led, evidence-convergent — §7.1: Design inference · Cross-cutting convergence. Design consequence: the DP4 register chooser + DP3 flexible-but-structured. A small act of temporal agency, not a structural fix (flexibility ≠ temporal autonomy).",
+    nodes:["aj","pb","sb","sorokin","dp4","dp3"],
+    arcs:[["sorokin","aj"],["aj","pb"],["pb","sb"],["sb","dp4"],["aj","dp3"]] },
+  chain:{ name:"Designer-to-learner causal chain", lineage:"confirmed",
+    desc:"Miller (label quality = 58% of navigation variance) → Krieglstein (salience → disorientation → ECL, β=.80, confirmed mediation) → Burin (metacognitive monitoring → comprehension, OR=1.71). The strongest available mechanistic warrant for the Orient-first design logic; cuts DP1 → DP2/DP4 → DP4.",
+    nodes:["miller","krieglstein","burin"], arcs:[["miller","krieglstein"],["krieglstein","burin"]], chain:true },
+  chain2:{ name:"Axis / spiral developmental chain (post-A3 — watch-item)", lineage:"schema §2.8 · toggled-off placeholder", placeholder:true,
+    desc:"A candidate second chain across passes: entry-axis → reflective return → higher-capacity re-entry, drawing on Conversations 7 and 9 (the HK trio, Canning & Callan, Carless). Schema §2.8 expects it post-A3 — rendered here as a faint placeholder, not an active A3 render.",
+    nodes:["hktrio","canningcallan","carless"], arcs:[["hktrio","canningcallan"],["canningcallan","carless"]], chain:true, placeholder:true }
+};
+
+/* ============================================================
+   RENDER — canopy, gap, clusters/readings
+   ============================================================ */
+function tierDots(t){ return t===1?"●●●●":t===2?"●●●○":t===3?"●●○○":t===4?"●○○○":""; }
+
+function renderCanopy(){
+  const grid = document.getElementById("canopy-grid");
+  grid.innerHTML = "";
+  let count = 0;
+  canopyGroups.forEach(g => {
+    const group = document.createElement("div");
+    group.className = "canopy-group" + (g.single ? " single" : "");
+    group.innerHTML = `<div class="grouplabel">${g.label}${g.horizon ? ' <span class="horizon-tag">beyond A3 scope</span>' : ''}</div>`;
+    const cards = document.createElement("div");
+    cards.className = "canopy-cards";
+    g.cards.forEach(c => {
+      count += (c.countAs != null ? c.countAs : (c.trio ? 3 : 1));
+      const card = document.createElement("div");
+      card.className = "def-card" + (c.trio ? " trio" : "") + (c.horizon ? " horizon" : "");
+      card.dataset.id = c.id;
+      if (c.cluster) card.dataset.cluster = c.cluster;
+      let html = "";
+      if (c.flagCell) html += `<span class="flagdot" title="${c.flagCell}">⚑</span>`;
+      html += `<div class="ref">${c.ref}${c.yr ? ` <span class="yr">${c.yr}</span>` : ""}</div>`;
+      html += `<div class="role">${c.role}</div>`;
+      if (c.trio){
+        html += `<div class="triolist">` + c.members.map(m => `<span><b>${m[0]}</b> · ${m[1]}</span>`).join("") + `</div>`;
+      }
+      if (c.tension){
+        html += `<div class="meta-row"><span class="fn-badge ${c.fn}">${c.fn}</span><span class="badge tension-flag" data-tension>⚠ tension</span></div>`;
+        html += `<div class="tension-body"><strong>${c.tension.title}</strong> ${c.tension.body}</div>`;
+      } else {
+        html += `<span class="fn-badge ${c.fn}">${c.fn}</span>`;
+      }
+      if (c.note) html += `<div class="canopy-note">${c.note}</div>`;
+      card.innerHTML = html;
+      cards.appendChild(card);
+    });
+    group.appendChild(cards);
+    grid.appendChild(group);
+  });
+  document.getElementById("canopy-count").textContent = count + " nodes";
+}
+
+function renderGap(){
+  const col = document.getElementById("col-gap");
+  col.querySelectorAll(".gap-card").forEach(n => n.remove());
+  gapCards.forEach(c => {
+    const card = document.createElement("div");
+    card.className = "gap-card" + (c.rationale ? " rationale-gap" : "");
+    card.dataset.id = c.id;
+    let html = "";
+    if (c.flagCell) html += `<span class="flagdot" title="${c.flagCell}">⚑</span>`;
+    html += `<div class="ref">${c.ref} <span class="yr">${c.yr}</span></div>`;
+    html += `<div class="gist">${c.gist}</div>`;
+    html += `<div class="targets">${c.targets}</div>`;
+    card.innerHTML = html;
+    col.appendChild(card);
+  });
+}
+
+let splitHeutagogy = true;
+
+function renderReadings(){
+  const col = document.getElementById("col-readings");
+  col.querySelectorAll(".cluster").forEach(n => n.remove());
+
+  // build the cluster display order, merging het→sdl when split is off
+  let order = clusterDefs.slice();
+  if (!splitHeutagogy){
+    order = order.filter(c => c.id !== "het").map(c => c.id === "sdl" ? {id:"sdl", label:"SDL &amp; heutagogy", merged:true} : c);
+  }
+
+  order.forEach(cd => {
+    const group = document.createElement("div");
+    group.className = "cluster " + cd.id + (cd.isNew ? " new-cluster" : "");
+
+    let members = readings.filter(r => r.lit === cd.id);
+    if (cd.merged) members = readings.filter(r => r.lit === "sdl" || r.lit === "het");
+
+    const head = document.createElement("div");
+    head.className = "cluster-head";
+    head.innerHTML = `<span class="dot"></span><span class="cluster-label">${cd.label}</span><span class="cluster-count">${members.length} papers</span>`;
+    group.appendChild(head);
+
+    let lastLit = null;
+    members.forEach(r => {
+      if (cd.merged && r.lit === "het" && lastLit !== "het"){
+        const sub = document.createElement("div");
+        sub.className = "subgroup-label";
+        sub.textContent = "Heutagogy / axis";
+        group.appendChild(sub);
+      }
+      lastLit = r.lit;
+      group.appendChild(buildReading(r));
+    });
+    col.appendChild(group);
+  });
+
+  document.getElementById("readings-count").textContent = readings.length + " readings · 7 clusters" + (splitHeutagogy ? "" : " (SDL+Heut merged → 6)");
+}
+
+function buildReading(r){
+  const card = document.createElement("div");
+  card.className = "reading t" + r.tier + (r.bridging ? " bridging" : "");
+  card.dataset.id = r.id;
+  card.dataset.lit = r.lit;
+  let badges = `<span class="badge method">${r.method}</span>`;
+  badges += `<span class="badge tier-text">T${r.tier} ${r.tier===1?"flagship":r.tier===2?"strong":r.tier===3?"specialist":"limited"}</span>`;
+  badges += `<span class="badge cites">${r.cites}</span>`;
+  if (r.extraBadge) badges += `<span class="badge note">${r.extraBadge}</span>`;
+  if (r.flagCell) badges += `<span class="badge flag-cell" title="${r.flagCell}">⚑ open cell</span>`;
+  if (r.tension) badges += `<span class="badge tension-flag" data-tension>⚠ tension</span>`;
+
+  let html = `<div class="row1"><div class="ref">${r.ref}${r.yr ? ` <span class="yr">${r.yr}</span>` : ""}</div>`;
+  html += `<div class="tier" title="${r.tierTitle}">${tierDots(r.tier)}</div></div>`;
+  html += `<div class="meta-row">${badges}</div>`;
+  html += `<div class="stat">${r.stat}</div>`;
+  if (r.subnote) html += `<div class="subnote">${r.subnote}</div>`;
+  if (r.tension) html += `<div class="tension-body"><strong>${r.tension.title}</strong> ${r.tension.body}</div>`;
+  card.innerHTML = html;
+  return card;
+}
+
+/* ============================================================
+   SVG path rendering
+   ============================================================ */
+const svg = document.getElementById("links");
+const wrap = document.getElementById("diagram");
+
+function rectIn(parent, el){
+  const p = parent.getBoundingClientRect();
+  const r = el.getBoundingClientRect();
+  return { x:r.left-p.left, y:r.top-p.top, w:r.width, h:r.height };
+}
+function pathHorizontal(a, b){
+  const A = rectIn(wrap, a), B = rectIn(wrap, b);
+  const x1 = A.x + A.w, y1 = A.y + A.h/2;
+  const x2 = B.x,        y2 = B.y + B.h/2;
+  const dx = (x2 - x1) * 0.55;
+  return `M ${x1.toFixed(1)} ${y1.toFixed(1)} C ${(x1+dx).toFixed(1)} ${y1.toFixed(1)}, ${(x2-dx).toFixed(1)} ${y2.toFixed(1)}, ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+}
+function pathDownward(a, b){
+  const A = rectIn(wrap, a), B = rectIn(wrap, b);
+  const x1 = A.x + A.w/2, y1 = A.y + A.h;
+  const x2 = B.x + B.w*0.35, y2 = B.y;
+  const dy = (y2 - y1) * 0.55;
+  return `M ${x1.toFixed(1)} ${y1.toFixed(1)} C ${x1.toFixed(1)} ${(y1+dy).toFixed(1)}, ${x2.toFixed(1)} ${(y2-dy).toFixed(1)}, ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+}
+function pathArc(a, b){
+  const A = rectIn(wrap, a), B = rectIn(wrap, b);
+  const x1 = A.x + A.w/2, y1 = A.y + A.h/2;
+  const x2 = B.x + B.w/2, y2 = B.y + B.h/2;
+  const mx = (x1+x2)/2, my = (y1+y2)/2;
+  const dx = x2 - x1, dy = y2 - y1;
+  const offset = Math.min(80, Math.max(30, Math.abs(dy)*0.35 + Math.abs(dx)*0.1));
+  return `M ${x1.toFixed(1)} ${y1.toFixed(1)} Q ${(mx-dy*0.15).toFixed(1)} ${(my-offset*Math.sign(dx||1)*0.3).toFixed(1)}, ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+}
+
+let lineNodes = [];
+let convoNodes = [];
+
+function render(){
+  const w = wrap.clientWidth, h = wrap.clientHeight;
+  svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+  svg.setAttribute("width", w);
+  svg.setAttribute("height", h);
+  svg.innerHTML = "";
+  lineNodes = [];
+  convoNodes = [];
+
+  const addPath = (a, b, cls, dPath, extra) => {
+    const A = document.querySelector(`[data-id="${a}"]`);
+    const B = document.querySelector(`[data-id="${b}"]`);
+    if (!A || !B) return null;
+    const p = document.createElementNS("http://www.w3.org/2000/svg","path");
+    p.setAttribute("d", dPath(A, B));
+    p.setAttribute("class", cls);
+    p.dataset.from = a; p.dataset.to = b;
+    if (extra) Object.assign(p.dataset, extra);
+    svg.appendChild(p);
+    return p;
+  };
+
+  links.forEach(l => {
+    const p = addPath(l.from, l.to, l.kind, pathHorizontal);
+    if (p){ p.dataset.kind = l.kind; lineNodes.push({ el:p, link:l }); }
+  });
+  canopyLinks.forEach(l => {
+    const p = addPath(l.from, l.to, "canopy-link", pathDownward);
+    if (p){ lineNodes.push({ el:p, link:{from:l.from,to:l.to,kind:"canopy-link"} }); }
+  });
+  gapLinks.forEach(l => {
+    const p = addPath(l.from, l.to, "gap-link" + (l.rationale ? " rationale" : ""), pathHorizontal);
+    if (p){ lineNodes.push({ el:p, link:{from:l.from,to:l.to,kind:"gap-link"} }); }
+  });
+
+  Object.entries(conversations).forEach(([cid, c]) => {
+    c.arcs.forEach(([f, t]) => {
+      const cls = c.chain ? ("chain-link" + (c.placeholder ? " placeholder" : "")) : ("conversation" + (c.rationale ? " rationale" : ""));
+      const p = addPath(f, t, cls, pathArc);
+      if (p){ p.dataset.convo = cid; convoNodes.push({ el:p, cid }); }
+    });
+  });
+}
+
+/* ============================================================
+   Interaction
+   ============================================================ */
+let allNodes = [];
+let lockedId = null;
+let activeConvo = null;
+
+function refreshNodes(){ allNodes = [...document.querySelectorAll("[data-id]")]; }
+
+function clear(){
+  document.body.classList.remove("has-active");
+  allNodes.forEach(n => n.classList.remove("active","related","in-conversation"));
+  lineNodes.forEach(({el}) => el.classList.remove("highlight"));
+  convoNodes.forEach(({el}) => el.classList.remove("show"));
+  const banner = document.getElementById("convo-banner");
+  banner.classList.remove("show","rationale");
+  document.querySelectorAll(".convo-chip").forEach(c => c.classList.remove("active"));
+}
+
+function reachableFrom(id){
+  const out = new Set([id]);
+  links.forEach(l => { if (l.from===id) out.add(l.to); if (l.to===id) out.add(l.from); });
+  canopyLinks.forEach(l => { if (l.from===id) out.add(l.to); if (l.to===id) out.add(l.from); });
+  gapLinks.forEach(l => { if (l.from===id) out.add(l.to); if (l.to===id) out.add(l.from); });
+  return out;
+}
+
+function activate(id){
+  clear();
+  document.body.classList.add("has-active");
+  const reach = reachableFrom(id);
+  allNodes.forEach(n => {
+    if (n.dataset.id === id) n.classList.add("active");
+    else if (reach.has(n.dataset.id)) n.classList.add("related");
+  });
+  lineNodes.forEach(({el, link}) => { if (link.from === id || link.to === id) el.classList.add("highlight"); });
+}
+
+function bindNodes(){
+  refreshNodes();
+  allNodes.forEach(n => {
+    if (n.dataset.bound) return;
+    n.dataset.bound = "1";
+    n.addEventListener("mouseenter", () => { if (!lockedId && !activeConvo) activate(n.dataset.id); });
+    n.addEventListener("mouseleave", () => { if (!lockedId && !activeConvo) clear(); });
+    n.addEventListener("click", (e) => {
+      if (e.target.closest("[data-tension]")) return;
+      e.stopPropagation();
+      if (lockedId === n.dataset.id){ lockedId = null; clear(); }
+      else { activeConvo = null; lockedId = n.dataset.id; activate(lockedId); }
+    });
+  });
+  document.querySelectorAll("[data-tension]").forEach(b => {
+    if (b.dataset.boundt) return;
+    b.dataset.boundt = "1";
+    b.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const card = b.closest(".reading") || b.closest(".def-card");
+      if (card) card.classList.toggle("tension-open");
+      setTimeout(render, 60);
+    });
+  });
+}
+
+document.addEventListener("click", (e) => {
+  if (e.target.closest(".chip") || e.target.closest(".flagtoggle")) return;
+  lockedId = null; activeConvo = null; clear();
+});
+
+/* Focus chips */
+document.querySelectorAll(".chip:not(.convo-chip)").forEach(c => c.addEventListener("click", (e) => {
+  e.stopPropagation();
+  document.querySelectorAll(".chip:not(.convo-chip)").forEach(x => x.classList.remove("active"));
+  document.querySelectorAll(".convo-chip").forEach(x => x.classList.remove("active"));
+  c.classList.add("active");
+  activeConvo = null;
+  applyFilter(c.dataset.filter);
+}));
+
+function applyFilter(f){
+  lockedId = null;
+  clear();
+  if (f === "all") return;
+
+  if (f === "tensions"){
+    document.body.classList.add("has-active");
+    document.querySelectorAll("[data-tension]").forEach(b => {
+      const card = b.closest(".reading") || b.closest(".def-card");
+      if (card){ card.classList.add("active","tension-open"); }
+    });
+    setTimeout(render, 60);
+    return;
+  }
+  if (f === "def"){
+    document.body.classList.add("has-active");
+    document.querySelectorAll(".def-card").forEach(d => d.classList.add("active"));
+    document.querySelectorAll(".dp").forEach(d => d.classList.add("related"));
+    lineNodes.forEach(({el, link}) => { if (link.kind === "canopy-link") el.classList.add("highlight"); });
+    return;
+  }
+  if (f === "tmp"){
+    document.body.classList.add("has-active");
+    document.querySelectorAll('.def-card[data-cluster="tmp"]').forEach(d => d.classList.add("active"));
+    ["dp4","dp3"].forEach(id => { const el = document.querySelector(`.dp[data-id="${id}"]`); if (el) el.classList.add("related"); });
+    lineNodes.forEach(({el, link}) => { if (link.kind === "canopy-link" && ["aj","pb","sb","sorokin"].includes(link.from)) el.classList.add("highlight"); });
+    return;
+  }
+
+  const isDP = /^dp\d$/.test(f);
+  const isLit = ["hci","hyp","clt","sdl","het","cr","af"].includes(f);
+
+  if (isDP){
+    document.body.classList.add("has-active");
+    const dpEl = document.querySelector(`[data-id="${f}"]`);
+    if (dpEl) dpEl.classList.add("active");
+    const feedingThemes = links.filter(l => l.to === f).map(l => l.from);
+    feedingThemes.forEach(t => { const tEl = document.querySelector(`[data-id="${t}"]`); if (tEl) tEl.classList.add("related"); });
+    Object.entries(readingDPs).forEach(([rid, dps]) => {
+      if (dps.includes(f)){ const rEl = document.querySelector(`[data-id="${rid}"]`); if (rEl) rEl.classList.add("related"); }
+    });
+    canopyLinks.forEach(cl => { if (cl.to === f){ const cEl = document.querySelector(`[data-id="${cl.from}"]`); if (cEl) cEl.classList.add("related"); } });
+    gapLinks.forEach(gl => { if (gl.to === f){ const gEl = document.querySelector(`[data-id="${gl.from}"]`); if (gEl) gEl.classList.add("related"); } });
+    lineNodes.forEach(({el, link}) => {
+      const a = link.from, b = link.to;
+      const aActive = a === f || feedingThemes.includes(a) || (readingDPs[a] && readingDPs[a].includes(f));
+      const bActive = b === f || feedingThemes.includes(b) || (readingDPs[b] && readingDPs[b].includes(f));
+      const isCanopy = link.kind === "canopy-link" && b === f;
+      const isGap = link.kind === "gap-link" && b === f;
+      if ((aActive && bActive) || isCanopy || isGap) el.classList.add("highlight");
+    });
+  } else if (isLit){
+    document.body.classList.add("has-active");
+    const cards = [...document.querySelectorAll(`.reading[data-lit="${f}"]`)];
+    const reach = new Set();
+    cards.forEach(r => { const rid = r.dataset.id; r.classList.add("active"); reachableFrom(rid).forEach(x => reach.add(x)); });
+    allNodes.forEach(n => { if (reach.has(n.dataset.id) && !n.classList.contains("active")) n.classList.add("related"); });
+    lineNodes.forEach(({el, link}) => { if (reach.has(link.from) && reach.has(link.to)) el.classList.add("highlight"); });
+  }
+}
+
+/* Conversation chips */
+document.querySelectorAll(".convo-chip").forEach(c => c.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const cid = c.dataset.convo;
+  if (activeConvo === cid){
+    activeConvo = null; clear();
+    document.querySelector('.chip[data-filter="all"]').classList.add("active");
+    return;
+  }
+  document.querySelectorAll(".chip:not(.convo-chip)").forEach(x => x.classList.remove("active"));
+  document.querySelectorAll(".convo-chip").forEach(x => x.classList.remove("active"));
+  c.classList.add("active");
+  showConversation(cid);
+}));
+
+function showConversation(cid){
+  clear();
+  activeConvo = cid;
+  const c = conversations[cid];
+  document.body.classList.add("has-active");
+  c.nodes.forEach(id => { const el = document.querySelector(`[data-id="${id}"]`); if (el) el.classList.add("in-conversation"); });
+  convoNodes.forEach(({el, cid:nodeCid}) => { if (nodeCid === cid) el.classList.add("show"); });
+
+  const banner = document.getElementById("convo-banner");
+  document.getElementById("convo-name").textContent = c.name;
+  document.getElementById("convo-lineage").textContent = c.lineage ? "[" + c.lineage + "]" : "";
+  document.getElementById("convo-desc").textContent = c.desc;
+  banner.classList.add("show");
+  banner.classList.toggle("rationale", !!c.rationale || !!c.placeholder);
+
+  const chip = document.querySelector(`.convo-chip[data-convo="${cid}"]`);
+  if (chip) chip.classList.add("active");
+  setTimeout(render, 60);
+}
+
+/* ============================================================
+   ⑥ Theme overlays — render + mode switch (the A2 / A3 fork)
+   ============================================================ */
+const surfacesNarrative = {
+  rich: `The diagram does analytical work the prose otherwise has to argue. <strong>Six theme bands carry the analytical weight</strong>: Theme 5 makes the expertise-adaptive-support claim explicit (guidance fades / adjusts; not all load is harmful), Theme 6 the capability-across-passes claim (designed-for, developed non-linearly, carried forward). <strong>DP2 reads as the mechanistic core</strong> (Amadieu + Krieglstein + the signalling cluster); <strong>DP3 is no longer thinnest on sources</strong> but keeps an evidence-type asymmetry, reframed via Conversation 10 as honest-warrant. <strong>Conversation 3 (expertise reversal) is the densest exchange.</strong> Tier grades standing, not role: <strong>DeStefano sits at T1 on venue</strong> though a review — the review-ness travels in its consistent-with edge, by design. <strong>Bhatti stays dimmed</strong> as the only T4, conceptual-only.`,
+  lean: `The diagram does analytical work the prose otherwise has to argue. With <strong>themes held at 4 (broadened)</strong>, the analytical weight lives in the <strong>eleven conversation chips</strong> — the new convergences surface one layer down rather than as extra bands. <strong>Conversation 3 (expertise reversal) is the densest</strong>; Conversations 7 (axis / designed-not-granted), 8 (capacity-over-completion) and 9 (spiral) carry the heutagogy / capability claims the rich variant spins into Themes 5 and 6. <strong>DP2 reads as the mechanistic core</strong>; <strong>DP3 is no longer thinnest on sources</strong> but keeps an evidence-type asymmetry, reframed via Conversation 10 as honest-warrant. Tier grades standing, not role: <strong>DeStefano sits at T1 on venue</strong> though a review — by design. <strong>Bhatti stays dimmed</strong> as the only T4.`
+};
+const temporalCoda = ` <strong>Conversation 11 (the learner-owned temporal register)</strong> lands on <strong>DP4</strong> (register-as-agency) and <strong>DP3</strong> (flexible-but-structured): design-led, evidence-convergent — Alhadeff-Jones's rhythm grain + Pschetz &amp; Bastian's Family Clock + Shahjahan &amp; Bano in-population, over the Sorokin &amp; Merton root. <strong>A small act of temporal agency, not a structural fix</strong> (flexibility ≠ temporal autonomy); the rhythm grain rests on a single-scholar core. Sorokin is highest-cited yet most out-of-scope — tier ≠ load.`;
+
+function renderThemes(mode){
+  const host = document.getElementById("themes-host");
+  host.innerHTML = "";
+  themeDefs[mode].forEach(t => {
+    const card = document.createElement("div");
+    card.className = "theme";
+    card.dataset.id = t.id;
+    card.innerHTML = `<div class="num">${t.num}${t.isNew ? '<span class="newtag">new</span>' : ''}</div>`
+      + `<div class="title">${t.title}</div>`
+      + `<div class="gloss">${t.gloss}</div>`;
+    host.appendChild(card);
+  });
+}
+
+let themeMode = "rich";
+
+function setMode(mode){
+  themeMode = mode;
+  links = themeLinks[mode];
+  document.body.classList.remove("mode-rich","mode-lean");
+  document.body.classList.add("mode-" + mode);
+  document.querySelectorAll("#mode-toggle button").forEach(b => b.classList.toggle("active", b.dataset.mode === mode));
+  document.getElementById("themes-count").textContent = (mode === "rich" ? "6 bands · rich" : "4 bands · lean");
+  const sp = document.getElementById("surfaces-panel");
+  if (sp) sp.innerHTML = surfacesNarrative[mode] + temporalCoda;
+  try { localStorage.setItem("ea_v6_themeMode", mode); } catch(e){}
+  lockedId = null; activeConvo = null;
+  renderThemes(mode);
+  bindNodes();
+  clear();
+  render();
+}
+
+document.querySelectorAll("#mode-toggle button").forEach(b => b.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (b.dataset.mode !== themeMode) setMode(b.dataset.mode);
+}));
+
+/* Heutagogy split flag */
+document.getElementById("split-toggle").addEventListener("change", (e) => {
+  splitHeutagogy = e.target.checked;
+  lockedId = null; activeConvo = null;
+  renderReadings();
+  bindNodes();
+  clear();
+  render();
+});
+
+/* ============================================================
+   Boot
+   ============================================================ */
+renderCanopy();
+renderGap();
+renderReadings();
+let initialMode = "rich";
+try { const saved = localStorage.getItem("ea_v6_themeMode"); if (saved === "rich" || saved === "lean") initialMode = saved; } catch(e){}
+setMode(initialMode);   /* renders themes, sets links, binds nodes, renders SVG */
+window.addEventListener("resize", render);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(render);
+setTimeout(render, 250);
+setTimeout(render, 600);
+</script>
+</body>
+</html>
